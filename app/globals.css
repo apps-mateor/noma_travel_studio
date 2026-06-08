@@ -1,26 +1,234 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ------------------------------------------------------------------ */
+/*  Design tokens — extraídos del brandbook de noma.                   */
+/*  Tailwind v4 genera utilidades a partir de estas variables:         */
+/*  --color-* -> bg-/text-/border-, --font-* -> font-*, etc.           */
+/* ------------------------------------------------------------------ */
+@theme {
+  /* Paleta principal */
+  --color-cream: #fcedc1; /* Off white  — fondo principal */
+  --color-paper: #fbf4dd; /* Crema más claro para capas    */
+  --color-brown: #59392b; /* Marrón Explorador — texto/bg  */
+  --color-brown-soft: #6f4a39;
+  --color-celeste: #d6e6fd; /* Celeste Viaje — fondos        */
+  /* Paleta secundaria */
+  --color-naranja: #db5c35; /* Naranja noma — solo acentos   */
+  --color-verde: #2b402d; /* Verde Único — fondo/texto     */
+
+  /* Tipografías REALES del brandbook (next/font/local en app/fonts.ts) */
+  --font-display: var(--font-presicav), system-ui, sans-serif; /* Presicav   */
+  --font-serif: var(--font-newspirit), Georgia, serif; /* New Spirit  */
+  --font-hand: var(--font-railway), cursive; /* Railway Gank */
+
+  /* Movimiento */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Ritmo de sección */
+  --spacing-section: clamp(5rem, 3.5rem + 7vw, 11rem);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ------------------------------------------------------------------ */
+/*  Base                                                               */
+/* ------------------------------------------------------------------ */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-brown);
+    font-family: var(--font-serif);
+    /* New Spirit es de un solo peso: permitimos síntesis para jerarquía. */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--color-naranja);
+    color: var(--color-cream);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-naranja);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ------------------------------------------------------------------ */
+/*  Utilidades de marca                                                */
+/* ------------------------------------------------------------------ */
+@layer components {
+  /* Título display estilo Presicav: mayúscula, geométrica, tracked. */
+  .display {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    line-height: 0.98;
+  }
+
+  .eyebrow {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-weight: 600;
+    font-size: 0.72rem;
+  }
+
+  /* Acento manuscrito (Railway Gank). */
+  .hand {
+    font-family: var(--font-hand);
+    font-weight: 600;
+    line-height: 0.9;
+  }
+
+  /* Subrayado gestual a mano bajo un claim. */
+  .underline-hand {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='12' viewBox='0 0 200 12' fill='none'%3E%3Cpath d='M2 8C40 3 90 3 130 6C160 8 180 7 198 4' stroke='%23DB5C35' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    background-size: 100% 0.55em;
+    padding-bottom: 0.35em;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Grano de película — capa de atmósfera sobre todo el sitio.         */
+/* ------------------------------------------------------------------ */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.08;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Tratamiento analógico cálido para igualar fotos de stock al mood. */
+.film {
+  filter: saturate(0.92) contrast(1.02) sepia(0.16) brightness(0.98);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Reveal en scroll (ver hooks/useReveal + components/ui/Reveal).     */
+/*  Progressive enhancement: SÓLO se ocultan si hay JS (html.js).      */
+/*  Sin JS, el contenido siempre es visible (SEO / accesibilidad).     */
+/* ------------------------------------------------------------------ */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.js [data-reveal="shown"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal],
+  .js [data-reveal="shown"] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Marquee infinito (personalidad de marca). */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee var(--marquee-duration, 38s) linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* Columnas de fotos con scroll vertical infinito (hero). */
+@keyframes vmarquee-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+@keyframes vmarquee-down {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.vmarquee-up {
+  animation: vmarquee-up var(--vmarquee-duration, 44s) linear infinite;
+}
+.vmarquee-down {
+  animation: vmarquee-down var(--vmarquee-duration, 44s) linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vmarquee-up,
+  .vmarquee-down {
+    animation: none;
+  }
+}
+
+/* Sello giratorio lento. */
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-slow {
+  animation: spin-slow 26s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin-slow {
+    animation: none;
+  }
+}
+
+/* Oculta scrollbar en carruseles horizontales con scroll-snap. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
