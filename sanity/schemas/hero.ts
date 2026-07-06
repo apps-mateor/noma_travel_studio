@@ -14,6 +14,56 @@ export const hero = defineType({
       initialValue: "Curated journeys\nfor modern explorers",
     }),
     defineField({
+      name: "estilo",
+      title: "Estilo del título",
+      type: "object",
+      options: { columns: 3 },
+      fields: [
+        defineField({
+          name: "tipografia",
+          title: "Tipografía",
+          type: "string",
+          options: {
+            layout: "radio",
+            list: [
+              { title: "Presicav (títulos de marca)", value: "display" },
+              { title: "New Spirit (serif editorial)", value: "serif" },
+              { title: "Railway Gank (manuscrita)", value: "hand" },
+            ],
+          },
+          initialValue: "display",
+        }),
+        defineField({
+          name: "tamano",
+          title: "Tamaño",
+          type: "string",
+          options: {
+            layout: "radio",
+            list: [
+              { title: "Chico", value: "chico" },
+              { title: "Mediano", value: "mediano" },
+              { title: "Grande", value: "grande" },
+            ],
+          },
+          initialValue: "mediano",
+        }),
+        defineField({
+          name: "alineacion",
+          title: "Alineación",
+          type: "string",
+          options: {
+            layout: "radio",
+            list: [
+              { title: "Izquierda", value: "izquierda" },
+              { title: "Centro", value: "centro" },
+              { title: "Derecha", value: "derecha" },
+            ],
+          },
+          initialValue: "centro",
+        }),
+      ],
+    }),
+    defineField({
       name: "palabraNaranja",
       title: "Palabra en naranja",
       description: "Qué palabra del título se pinta de naranja (tiene que estar escrita igual en el título).",
@@ -28,17 +78,12 @@ export const hero = defineType({
       initialValue: "Viajes a medida, desde la escucha y el criterio",
     }),
     defineField({
-      name: "imagenFondo",
-      title: "Imagen de fondo",
-      description: "Se muestra mientras carga el video, o si no hay video.",
-      type: "image",
-      options: { hotspot: true },
-    }),
-    defineField({
-      name: "videoUrl",
-      title: "Video de fondo (URL)",
-      description: "Link directo a un .mp4 (opcional). Si está vacío se usa la imagen.",
-      type: "url",
+      name: "fondo",
+      title: "Fondo (imagen o video)",
+      description:
+        "Subí una foto (jpg/png/webp) o un video corto (.mp4, ideal menos de 8mb, sin audio). El sitio detecta solo cuál es.",
+      type: "file",
+      options: { accept: "image/*,video/mp4,video/webm" },
     }),
   ],
   preview: { prepare: () => ({ title: "Portada (Hero)" }) },

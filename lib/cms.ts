@@ -12,12 +12,18 @@ import { projectId, dataset, apiVersion, cmsEnabled } from "@/sanity/env";
 //  previa en vivo del admin: /admin → Presentación.
 // ──────────────────────────────────────────────────────────────────
 
+export type CmsEstilo = {
+  tipografia?: "display" | "serif" | "hand";
+  tamano?: "chico" | "mediano" | "grande";
+  alineacion?: "izquierda" | "centro" | "derecha";
+};
+
 export type CmsHero = {
   titulo?: string;
+  estilo?: CmsEstilo;
   palabraNaranja?: string;
   subtitulo?: string;
-  imagenFondo?: string;
-  videoUrl?: string;
+  fondo?: { url?: string; mimeType?: string };
 };
 
 export type CmsRecuadro = { titulo?: string; texto?: string };
@@ -87,8 +93,8 @@ export const { sanityFetch, SanityLive } = defineLive({
 // Un solo fetch para toda la home. Las imágenes se resuelven a URL del CDN.
 const QUERY = /* groq */ `{
   "hero": *[_type == "hero"][0]{
-    titulo, palabraNaranja, subtitulo, videoUrl,
-    "imagenFondo": imagenFondo.asset->url
+    titulo, estilo, palabraNaranja, subtitulo,
+    "fondo": fondo.asset->{url, mimeType}
   },
   "concepto": *[_type == "concepto"][0]{
     fraseInicio, fraseMedio, palabraDestacada, fraseFin, proposito,

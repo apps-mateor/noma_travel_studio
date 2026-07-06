@@ -1,16 +1,39 @@
 import { Fragment } from "react";
 import { Button } from "@/components/ui/Button";
 import { imageSrc } from "@/lib/images";
-import { cdnImage, type CmsHero } from "@/lib/cms";
+import { cdnImage, type CmsHero, type CmsEstilo } from "@/lib/cms";
 
 // 👉 VIDEO DEL HERO — poné tu video en /public/videos/hero.mp4
-//    (mp4 comprimido, ideal < 8mb, sin audio) o cargá una URL desde
-//    el admin. Mientras no exista, se muestra la imagen de fondo.
+//    (mp4 comprimido, ideal < 8mb, sin audio) o subilo directo desde
+//    el admin en "Fondo". Mientras no exista, se muestra la imagen.
 const HERO_VIDEO = "/videos/hero.mp4";
 
 const DEFAULT_TITULO = "Curated journeys\nfor modern explorers";
 const DEFAULT_PALABRA = "modern";
 const DEFAULT_SUBTITULO = "Viajes a medida, desde la escucha y el criterio";
+
+// Presets de estilo editables desde el admin. Acotados a la identidad
+// de marca: tipografías del brandbook y escalas que no rompen el layout.
+const TIPOGRAFIA: Record<NonNullable<CmsEstilo["tipografia"]>, string> = {
+  display: "display",
+  serif: "font-serif",
+  hand: "hand",
+};
+
+const TAMANO: Record<NonNullable<CmsEstilo["tamano"]>, string> = {
+  chico: "text-[clamp(1.4rem,3.5vw,2.6rem)]",
+  mediano: "text-[clamp(1.7rem,4.5vw,3.4rem)]",
+  grande: "text-[clamp(2.1rem,6.5vw,5rem)]",
+};
+
+const ALINEACION: Record<
+  NonNullable<CmsEstilo["alineacion"]>,
+  { wrap: string; text: string }
+> = {
+  izquierda: { wrap: "items-start", text: "text-left" },
+  centro: { wrap: "items-center", text: "text-center" },
+  derecha: { wrap: "items-end", text: "text-right" },
+};
 
 /** Renderiza el título respetando saltos de línea y pintando la palabra naranja. */
 function Titulo({ texto, palabra }: { texto: string; palabra?: string }) {
@@ -43,20 +66,30 @@ interface HeroProps {
 }
 
 /**
- * Hero full-bleed con video de fondo (referencia: Black Tomato).
- * Contenido compacto y centrado: la imagen/video protagoniza.
+ * Hero full-bleed con video o imagen de fondo (referencia: Black Tomato).
+ * Contenido compacto: la imagen/video protagoniza. La tipografía, el
+ * tamaño y la alineación del título se eligen desde el admin.
  */
 export function Hero({ data }: HeroProps) {
-  const poster = data?.imagenFondo
-    ? cdnImage(data.imagenFondo, 1920)
-    : imageSrc("noma-hero", { w: 1920, h: 1080 });
+  const fondoUrl = data?.fondo?.url;
+  const fondoEsVideo = Boolean(data?.fondo?.mimeType?.startsWith("video/"));
+
+  const poster =
+    fondoUrl && !fondoEsVideo
+      ? cdnImage(fondoUrl, 1920)
+      : imageSrc("noma-hero", { w: 1920, h: 1080 });
+  const videoSrc = fondoEsVideo && fondoUrl ? fondoUrl : HERO_VIDEO;
+
+  const tipografia = TIPOGRAFIA[data?.estilo?.tipografia ?? "display"];
+  const tamano = TAMANO[data?.estilo?.tamano ?? "mediano"];
+  const alineacion = ALINEACION[data?.estilo?.alineacion ?? "centro"];
 
   return (
     <section className="relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden bg-verde text-cream">
-      {/* Video de fondo */}
+      {/* Fondo: video (subido o /public/videos/hero.mp4) con imagen de respaldo */}
       <video
         className="absolute inset-0 h-full w-full object-cover"
-        src={data?.videoUrl ?? HERO_VIDEO}
+        src={videoSrc}
         poster={poster}
         autoPlay
         muted
@@ -74,9 +107,11 @@ export function Hero({ data }: HeroProps) {
         aria-hidden
       />
 
-      {/* Contenido centrado, compacto (ref. Black Tomato): la imagen manda */}
-      <div className="relative z-10 flex flex-col items-center px-5 pb-16 pt-32 text-center sm:px-8">
-        <h1 className="display max-w-4xl text-[clamp(1.7rem,4.5vw,3.4rem)] leading-[1.08]">
+      {/* Contenido compacto (ref. Black Tomato): la imagen manda */}
+      <div
+        className={`relative z-10 flex w-full max-w-[1400px] flex-col px-5 pb-16 pt-32 sm:px-8 ${alineacion.wrap} ${alineacion.text}`}
+      >
+        <h1 className={`${tipografia} ${tamano} max-w-4xl leading-[1.08]`}>
           <Titulo
             texto={data?.titulo ?? DEFAULT_TITULO}
             palabra={data?.palabraNaranja ?? DEFAULT_PALABRA}
@@ -87,7 +122,7 @@ export function Hero({ data }: HeroProps) {
           {data?.subtitulo ?? DEFAULT_SUBTITULO}
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+        <div className={`mt-8 flex flex-wrap items-center gap-4 ${alineacion.wrap === "items-center" ? "justify-center" : ""}`}>
           <Button href="/#contacto" tone="naranja">
             Planeá tu viaje
           </Button>

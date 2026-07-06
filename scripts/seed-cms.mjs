@@ -26,6 +26,7 @@ const docs = [
     _id: "hero",
     _type: "hero",
     titulo: "Curated journeys\nfor modern explorers",
+    estilo: { tipografia: "display", tamano: "mediano", alineacion: "centro" },
     palabraNaranja: "modern",
     subtitulo: "Viajes a medida, desde la escucha y el criterio",
   },
