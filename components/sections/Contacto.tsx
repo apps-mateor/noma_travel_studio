@@ -17,11 +17,9 @@ export function Contacto() {
         {/* Intro */}
         <div className="lg:col-span-5">
           <Reveal>
-            <Eyebrow className="text-brown/60">Contacto</Eyebrow>
+            <Eyebrow className="text-brown/60">Escribinos</Eyebrow>
             <h2 className="display mt-5 text-[clamp(2rem,5vw,3.6rem)]">
-              Contanos a dónde
-              <br />
-              te lleva la cabeza
+              Contacto
             </h2>
             <p className="mt-6 max-w-md font-serif text-lg leading-relaxed text-brown/80">
               Escuchamos antes de proponer. Contanos el contexto, el momento y el

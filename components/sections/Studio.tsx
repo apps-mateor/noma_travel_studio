@@ -1,11 +1,12 @@
 import { Section, Eyebrow } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { FilmImage } from "@/components/ui/FilmImage";
-import { STUDIO, POSICIONAMIENTO } from "@/lib/content";
+import { STUDIO, POSICIONAMIENTO, EQUIPO } from "@/lib/content";
 
 /**
- * El studio: historia real de la marca + imagen editorial superpuesta,
- * con el posicionamiento (Curaduría · Mirada · Criterio · Experiencia).
+ * Quiénes somos: historia real de la marca + foto de equipo, el
+ * posicionamiento (Curaduría · Mirada · Criterio · Experiencia) y
+ * las 3 fotos individuales con bio al hover.
  */
 export function Studio() {
   return (
@@ -59,6 +60,36 @@ export function Studio() {
             </ul>
           </Reveal>
         </div>
+      </div>
+
+      {/* Equipo — hover (o foco) revela rol y background de cada una */}
+      <div className="mt-16 grid gap-6 sm:grid-cols-3">
+        {EQUIPO.map((persona, i) => (
+          <Reveal key={persona.seed} delay={i * 90}>
+            <article className="group relative overflow-hidden rounded-2xl" tabIndex={0}>
+              <FilmImage
+                seed={persona.seed}
+                alt={`${persona.name} — ${persona.role}`}
+                sizes="(max-width: 640px) 100vw, 33vw"
+                className="aspect-[3/4] w-full [&>img]:group-hover:scale-105"
+              />
+              {/* Nombre siempre visible */}
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-verde/90 to-transparent p-5 pt-14 text-cream transition-opacity duration-500 group-hover:opacity-0 group-focus-within:opacity-0">
+                <h3 className="display text-lg">{persona.name}</h3>
+              </div>
+              {/* Overlay con bio al hover / foco */}
+              <div className="absolute inset-0 flex flex-col justify-end bg-verde/90 p-6 text-cream opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100 group-focus:opacity-100">
+                <p className="hand text-naranja" style={{ fontSize: "1.3rem" }}>
+                  {persona.role}
+                </p>
+                <h3 className="display mt-2 text-lg">{persona.name}</h3>
+                <p className="mt-3 font-serif text-sm leading-relaxed text-cream/85">
+                  {persona.bio}
+                </p>
+              </div>
+            </article>
+          </Reveal>
+        ))}
       </div>
     </Section>
   );

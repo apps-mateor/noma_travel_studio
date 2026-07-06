@@ -14,7 +14,7 @@ export const CONTACT = {
   // Mensaje que aparece pre-cargado al abrir el chat (opcional).
   whatsappMessage: "Hola noma, quiero empezar a planear un viaje.",
 
-  email: "hola@nomatravelstudio.com",
+  email: "contacto@nomatravelstudio.com",
   instagram: "https://www.instagram.com/noma__travelstudio/",
   instagramHandle: "@noma__travelstudio",
   location: "Buenos Aires, Argentina",
@@ -42,11 +42,11 @@ export type NavLink = { label: string; href: string };
 
 // El sitio es una landing one-page con anclas + páginas maquetadas.
 export const NAV_LINKS: readonly NavLink[] = [
-  { label: "Studio", href: "/#studio" },
+  { label: "Home", href: "/" },
+  { label: "Quiénes somos", href: "/#studio" },
   { label: "Cómo trabajamos", href: "/#metodo" },
-  { label: "Servicios", href: "/#servicios" },
   { label: "Destinos", href: "/#destinos" },
-  { label: "Manifiesto", href: "/#manifiesto" },
+  { label: "Contacto", href: "/#contacto" },
 ];
 
 export const FOOTER_LINKS: readonly NavLink[] = [

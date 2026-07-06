@@ -19,7 +19,11 @@ export function Concepto() {
                 {CONCEPTO.strike}
               </span>
             </span>{" "}
-            <span className="hand text-naranja" style={{ fontSize: "1.15em" }}>
+            {/* Palabra de marca resaltada: cursiva + tracking amplio */}
+            <span
+              className="hand text-naranja"
+              style={{ fontSize: "1.25em", letterSpacing: "0.14em" }}
+            >
               {CONCEPTO.word}
             </span>{" "}
             {CONCEPTO.post}
@@ -33,13 +37,14 @@ export function Concepto() {
         </p>
       </Reveal>
 
-      <div className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-brown/10 md:grid-cols-4">
+      {/* Propuesta de valor en recuadros naranjas con letra crema */}
+      <div className="mt-16 grid grid-cols-2 gap-4 md:grid-cols-4">
         {PROPUESTA_VALOR.map((item, i) => (
           <Reveal key={item.title} delay={i * 80}>
-            <div className="h-full bg-cream p-6">
-              <p className="display text-sm text-naranja">0{i + 1}</p>
+            <div className="h-full rounded-2xl bg-naranja p-6 text-cream transition-transform duration-300 hover:-translate-y-1">
+              <p className="display text-sm text-cream/80">0{i + 1}</p>
               <h3 className="mt-4 font-serif text-xl">{item.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-brown/70">{item.body}</p>
+              <p className="mt-2 text-sm leading-relaxed text-cream/85">{item.body}</p>
             </div>
           </Reveal>
         ))}

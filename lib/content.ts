@@ -14,7 +14,7 @@ export const CONCEPTO = {
 } as const;
 
 export const STUDIO = {
-  kicker: "El studio",
+  kicker: "Quiénes somos",
   title: "Detrás de todo, nosotras.",
   body: [
     "Nacimos de una pasión compartida por viajar y de una forma muy particular de hacerlo: con curiosidad, criterio y atención a los detalles que realmente importan.",
@@ -26,29 +26,61 @@ export const STUDIO = {
 // Cómo nos posicionamos: Curaduría + Mirada + Criterio + Experiencia
 export const POSICIONAMIENTO = ["Curaduría", "Mirada", "Criterio", "Experiencia"] as const;
 
-// Los 4 pilares de "La promesa: tenemos con qué".
-export type Pilar = { n: string; title: string; body: string };
+// Los 4 pilares de "Cómo trabajamos" (sin numeración, pedido de la marca).
+export type Pilar = { title: string; body: string };
 
 export const PILARES: readonly Pilar[] = [
   {
-    n: "01",
     title: "Knowhow real",
     body: "Recomendamos desde la experiencia propia: sabemos dónde dormir, qué zonas funcionan y qué experiencias valen la pena. No seguimos tendencias ni catálogos; cada decisión está respaldada por criterio.",
   },
   {
-    n: "02",
     title: "Cultura customer-centric",
     body: "El viaje no se arma desde un listado de lugares, sino desde una conversación profunda 1:1. Escuchamos tu contexto, tu momento vital y tu estilo para traducir todo eso en decisiones concretas.",
   },
   {
-    n: "03",
     title: "Servicio end to end",
     body: "No entregamos un PDF y desaparecemos. Estamos presentes antes, durante y después del viaje: resolvemos dudas, ajustamos sobre la marcha y acompañamos activamente.",
   },
   {
-    n: "04",
     title: "Producto diferencial",
     body: "Reservas, documentación, rutas, recomendaciones y decisiones viven en una app exclusiva, ordenada y accesible en un solo lugar. La tecnología no reemplaza el trato humano: lo potencia.",
+  },
+];
+
+// El "cómo lo hacemos": los 4 pasos del proceso, en orden.
+export type Paso = { title: string; body: string };
+
+export const PASOS: readonly Paso[] = [
+  { title: "Nos contás qué estás buscando", body: "Destino, fechas, tipo de experiencia…" },
+  { title: "Conectamos con el asesor ideal", body: "Alguien que conoce el destino a fondo." },
+  { title: "Recibís una propuesta a medida", body: "A medida, sin paquetes armados." },
+  { title: "Viajás con todo resuelto", body: "Y con asistencia cuando la necesites." },
+];
+
+// Equipo — 3 fotos individuales con bio al hover.
+// 👉 TODO: reemplazar nombres, roles y bios reales, y las fotos en
+//    lib/images.ts (seeds "noma-equipo-1/2/3" + "noma-equipo").
+export type Integrante = { name: string; role: string; bio: string; seed: string };
+
+export const EQUIPO: readonly Integrante[] = [
+  {
+    name: "Nombre Apellido",
+    role: "Co-founder · Curaduría",
+    bio: "Años de viajes propios convertidos en criterio: destinos probados, zonas que funcionan y experiencias que valen la pena.",
+    seed: "noma-equipo-1",
+  },
+  {
+    name: "Nombre Apellido",
+    role: "Co-founder · Experiencia",
+    bio: "La mirada sobre el detalle: ritmo del viaje, bases y tiempos pensados desde la escucha de cada viajero.",
+    seed: "noma-equipo-2",
+  },
+  {
+    name: "Nombre Apellido",
+    role: "Co-founder · Operación",
+    bio: "El acompañamiento antes, durante y después: reservas, rutas y decisiones ordenadas en un solo lugar.",
+    seed: "noma-equipo-3",
   },
 ];
 

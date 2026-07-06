@@ -58,10 +58,13 @@ export function Destinos() {
       </div>
 
       <Reveal delay={120}>
-        <div className="mt-10">
+        <div className="mt-10 flex flex-wrap items-center gap-6">
           <Button href="/destinos" variant="outline" tone="cream">
             Ver todos los destinos
           </Button>
+          <p className="hand text-naranja" style={{ fontSize: "1.7rem" }}>
+            Curated by noma
+          </p>
         </div>
       </Reveal>
     </Section>

@@ -49,11 +49,12 @@ export function SiteHeader() {
             scrolled ? "text-brown" : "text-cream"
           }`}
         >
+          {/* CTA naranja de marca (brandbook) */}
           <Link
-            href="/contacto"
-            className="hidden rounded-full border border-current/40 px-5 py-2 font-display text-[0.74rem] uppercase tracking-[0.16em] transition-colors duration-300 hover:bg-naranja hover:text-cream sm:inline-block"
+            href="/#contacto"
+            className="hidden rounded-full bg-naranja px-5 py-2 font-display text-[0.74rem] uppercase tracking-[0.16em] text-cream transition-all duration-300 hover:-translate-y-0.5 hover:bg-brown sm:inline-block"
           >
-            Planear viaje
+            Planeá tu viaje
           </Link>
 
           {/* Toggle móvil */}
