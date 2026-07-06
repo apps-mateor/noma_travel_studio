@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/Button";
-import { Seal } from "@/components/brand/Seal";
 import { imageSrc } from "@/lib/images";
 
 // 👉 VIDEO DEL HERO — poné tu video en /public/videos/hero.mp4
@@ -36,24 +35,19 @@ export function Hero() {
         aria-hidden
       />
 
-      {/* Contenido centrado */}
+      {/* Contenido centrado, compacto (ref. Black Tomato): la imagen manda */}
       <div className="relative z-10 flex flex-col items-center px-5 pb-16 pt-32 text-center sm:px-8">
-        <p className="hand mb-5 text-naranja" style={{ fontSize: "clamp(1.6rem,3vw,2.4rem)" }}>
-          Hay tantos viajes como viajeros.
-        </p>
-
-        <h1 className="display max-w-5xl text-[clamp(2.2rem,7.5vw,5.6rem)] leading-[1.02]">
+        <h1 className="display max-w-4xl text-[clamp(1.7rem,4.5vw,3.4rem)] leading-[1.08]">
           Curated journeys
           <br />
           for <span className="text-naranja">modern</span> explorers
         </h1>
 
-        <p className="mt-8 max-w-xl font-serif text-lg leading-relaxed text-cream/85">
-          Diseñamos viajes a medida desde la escucha y el criterio —no desde el
-          catálogo. Vos viajás; de los detalles nos ocupamos nosotras.
+        <p className="mt-5 max-w-xl font-display text-[0.72rem] uppercase tracking-[0.22em] text-cream/85">
+          Viajes a medida, desde la escucha y el criterio
         </p>
 
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Button href="/#contacto" tone="naranja">
             Planeá tu viaje
           </Button>
@@ -61,8 +55,6 @@ export function Hero() {
             Destinos
           </Button>
         </div>
-
-        <Seal className="mt-14 hidden w-16 text-cream/70 lg:block" />
       </div>
 
       {/* Indicador de scroll */}

@@ -6,9 +6,7 @@ export const PROPOSITO =
 
 export const CONCEPTO = {
   pre: "Hay tantos viajes como viajeros en el mundo.",
-  // El brandbook tacha "piensa" y lo reemplaza por "cura" — gesto de marca.
   linePlain: "El mejor es el que se",
-  strike: "piensa",
   word: "cura",
   post: "para vos.",
 } as const;

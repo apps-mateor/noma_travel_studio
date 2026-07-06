@@ -3,8 +3,8 @@ import { Reveal } from "@/components/ui/Reveal";
 import { CONCEPTO, PROPOSITO, PROPUESTA_VALOR } from "@/lib/content";
 
 /**
- * Concepto creativo: la frase con el tachado de marca
- * ("se ~~piensa~~ cura para vos") + propósito + propuesta de valor.
+ * Concepto creativo: la frase de marca ("el mejor es el que se cura
+ * para vos") + propósito + propuesta de valor.
  */
 export function Concepto() {
   return (
@@ -14,11 +14,6 @@ export function Concepto() {
           {CONCEPTO.pre}{" "}
           <span className="block sm:inline">
             {CONCEPTO.linePlain}{" "}
-            <span className="relative italic text-brown-soft">
-              <span className="line-through decoration-naranja decoration-2">
-                {CONCEPTO.strike}
-              </span>
-            </span>{" "}
             {/* Palabra de marca resaltada: cursiva + tracking amplio */}
             <span
               className="hand text-naranja"
