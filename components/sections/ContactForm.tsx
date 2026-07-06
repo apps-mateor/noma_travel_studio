@@ -39,6 +39,7 @@ export function ContactForm({ email }: ContactFormProps) {
           Email: campo("email"),
           "Tipo de viaje": campo("tipo"),
           Cuándo: campo("fecha"),
+          "Cuántos viajan": campo("personas"),
           Mensaje: campo("mensaje"),
         }),
       });
@@ -64,14 +65,20 @@ export function ContactForm({ email }: ContactFormProps) {
           <span className="eyebrow text-brown/60">Email</span>
           <input className={FIELD} type="email" name="email" placeholder="tu@email.com" required />
         </label>
-        <label className="flex flex-col gap-2">
-          <span className="eyebrow text-brown/60">Tipo de viaje</span>
-          <input className={FIELD} type="text" name="tipo" placeholder="Luna de miel, roadtrip…" />
-        </label>
-        <label className="flex flex-col gap-2">
-          <span className="eyebrow text-brown/60">¿Cuándo?</span>
-          <input className={FIELD} type="text" name="fecha" placeholder="Aprox. mes / año" />
-        </label>
+        <div className="grid gap-4 sm:col-span-2 sm:grid-cols-3">
+          <label className="flex flex-col gap-2">
+            <span className="eyebrow text-brown/60">Tipo de viaje</span>
+            <input className={FIELD} type="text" name="tipo" placeholder="Luna de miel, roadtrip…" />
+          </label>
+          <label className="flex flex-col gap-2">
+            <span className="eyebrow text-brown/60">¿Cuándo?</span>
+            <input className={FIELD} type="text" name="fecha" placeholder="Aprox. mes / año" />
+          </label>
+          <label className="flex flex-col gap-2">
+            <span className="eyebrow text-brown/60">¿Cuántos viajan?</span>
+            <input className={FIELD} type="text" name="personas" placeholder="Ej: 2 adultos, 2 peques" />
+          </label>
+        </div>
         <label className="flex flex-col gap-2 sm:col-span-2">
           <span className="eyebrow text-brown/60">Contanos un poco más</span>
           <textarea

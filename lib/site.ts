@@ -62,9 +62,11 @@ export const NAV_LINKS: readonly NavLink[] = [
   { label: "Contacto", href: "/#contacto" },
 ];
 
+// Mismas anclas que la navegación: el sitio es una one-page,
+// los links del footer scrollean la home (no abren subpáginas).
 export const FOOTER_LINKS: readonly NavLink[] = [
-  { label: "Studio", href: "/studio" },
-  { label: "Servicios", href: "/servicios" },
-  { label: "Destinos", href: "/destinos" },
-  { label: "Contacto", href: "/contacto" },
+  { label: "Quiénes somos", href: "/#studio" },
+  { label: "Cómo trabajamos", href: "/#metodo" },
+  { label: "Destinos", href: "/#destinos" },
+  { label: "Contacto", href: "/#contacto" },
 ];

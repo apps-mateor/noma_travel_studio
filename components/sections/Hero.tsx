@@ -1,4 +1,5 @@
 import { Fragment, type ReactNode } from "react";
+import { Arrow } from "@/components/brand/Arrow";
 import { Button } from "@/components/ui/Button";
 import { FitLines } from "@/components/ui/FitLines";
 import { imageSrc } from "@/lib/images";
@@ -153,10 +154,14 @@ export function Hero({ data }: HeroProps) {
         </div>
       </div>
 
-      {/* Indicador de scroll */}
-      <div className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2">
-        <span className="eyebrow animate-pulse text-cream/60">Scroll</span>
-      </div>
+      {/* Indicador de scroll: la flecha gestual de la marca, hacia abajo */}
+      <a
+        href="/#concepto"
+        aria-label="Bajar para explorar"
+        className="absolute bottom-7 left-1/2 z-10 -translate-x-1/2 animate-bounce text-cream/80 transition-colors hover:text-naranja motion-reduce:animate-none"
+      >
+        <Arrow className="h-4 rotate-90" />
+      </a>
     </section>
   );
 }
