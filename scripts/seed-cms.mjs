@@ -46,8 +46,7 @@ const docs = [
         ],
       },
     ],
-    estilo: { tipografia: "display", tamano: "mediano", alineacion: "centro" },
-    subtitulo: "Viajes a medida, desde la escucha y el criterio",
+    estilo: { tipografia: "display", tamano: "mediano", alineacion: "justificado" },
   },
   {
     _id: "concepto",

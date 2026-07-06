@@ -8,8 +8,6 @@ import { cdnImage, type CmsHero, type CmsEstilo, type CmsBlock } from "@/lib/cms
 //    el admin en "Fondo". Mientras no exista, se muestra la imagen.
 const HERO_VIDEO = "/videos/hero.mp4";
 
-const DEFAULT_SUBTITULO = "Viajes a medida, desde la escucha y el criterio";
-
 // Colores de marca disponibles como marks en el título enriquecido.
 const COLOR_MARK: Record<string, string> = {
   naranja: "text-naranja",
@@ -38,7 +36,14 @@ const ALINEACION: Record<
   izquierda: { wrap: "items-start", text: "text-left" },
   centro: { wrap: "items-center", text: "text-center" },
   derecha: { wrap: "items-end", text: "text-right" },
+  justificado: { wrap: "items-center", text: "text-center" },
 };
+
+// Justificado editorial: el bloque toma el ancho de la línea más larga
+// (display: table) y las demás se estiran hasta emparejar los bordes.
+// Sólo desde sm — en mobile el texto envuelve y quedaría agujereado.
+const JUSTIFICADO_CLASS =
+  "text-center sm:table sm:text-justify sm:[text-align-last:justify]";
 
 /** Renderiza el título enriquecido: cada bloque es una línea, los marks pintan color. */
 function Titulo({ bloques }: { bloques: CmsBlock[] }) {
@@ -95,7 +100,9 @@ export function Hero({ data }: HeroProps) {
 
   const tipografia = TIPOGRAFIA[data?.estilo?.tipografia ?? "display"];
   const tamano = TAMANO[data?.estilo?.tamano ?? "mediano"];
-  const alineacion = ALINEACION[data?.estilo?.alineacion ?? "centro"];
+  const modoAlineacion = data?.estilo?.alineacion ?? "centro";
+  const alineacion = ALINEACION[modoAlineacion];
+  const esJustificado = modoAlineacion === "justificado";
 
   return (
     <section className="relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden bg-verde text-cream">
@@ -124,15 +131,15 @@ export function Hero({ data }: HeroProps) {
       <div
         className={`relative z-10 flex w-full max-w-[1400px] flex-col px-5 pb-16 pt-32 sm:px-8 ${alineacion.wrap} ${alineacion.text}`}
       >
-        <h1 className={`${tipografia} ${tamano} max-w-4xl leading-[1.08]`}>
+        <h1
+          className={`${tipografia} ${tamano} leading-[1.08] ${
+            esJustificado ? `max-w-full ${JUSTIFICADO_CLASS}` : "max-w-4xl"
+          }`}
+        >
           {data?.titulo?.length ? <Titulo bloques={data.titulo} /> : <TituloDefault />}
         </h1>
 
-        <p className="mt-5 max-w-xl font-display text-[0.72rem] uppercase tracking-[0.22em] text-cream/85">
-          {data?.subtitulo ?? DEFAULT_SUBTITULO}
-        </p>
-
-        <div className={`mt-8 flex flex-wrap items-center gap-4 ${alineacion.wrap === "items-center" ? "justify-center" : ""}`}>
+        <div className={`mt-9 flex flex-wrap items-center gap-4 ${alineacion.wrap === "items-center" ? "justify-center" : ""}`}>
           <Button href="/#contacto" tone="naranja">
             Planeá tu viaje
           </Button>

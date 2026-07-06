@@ -15,7 +15,7 @@ import { projectId, dataset, apiVersion, cmsEnabled } from "@/sanity/env";
 export type CmsEstilo = {
   tipografia?: "display" | "serif" | "hand";
   tamano?: "chico" | "mediano" | "grande";
-  alineacion?: "izquierda" | "centro" | "derecha";
+  alineacion?: "izquierda" | "centro" | "derecha" | "justificado";
 };
 
 // Título enriquecido: cada bloque es una línea; los marks son colores.
@@ -25,7 +25,6 @@ export type CmsBlock = { _type: "block"; _key: string; children: CmsSpan[] };
 export type CmsHero = {
   titulo?: CmsBlock[];
   estilo?: CmsEstilo;
-  subtitulo?: string;
   fondo?: { url?: string; mimeType?: string };
 };
 
@@ -96,7 +95,7 @@ export const { sanityFetch, SanityLive } = defineLive({
 // Un solo fetch para toda la home. Las imágenes se resuelven a URL del CDN.
 const QUERY = /* groq */ `{
   "hero": *[_type == "hero"][0]{
-    titulo, estilo, subtitulo,
+    titulo, estilo,
     "fondo": fondo.asset->{url, mimeType}
   },
   "concepto": *[_type == "concepto"][0]{
