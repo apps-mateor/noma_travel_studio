@@ -1,5 +1,6 @@
-import { Fragment } from "react";
+import { Fragment, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
+import { FitLines } from "@/components/ui/FitLines";
 import { imageSrc } from "@/lib/images";
 import { cdnImage, type CmsHero, type CmsEstilo, type CmsBlock } from "@/lib/cms";
 
@@ -39,44 +40,36 @@ const ALINEACION: Record<
   justificado: { wrap: "items-center", text: "text-center" },
 };
 
-// Justificado editorial: el bloque toma el ancho de la línea más larga
-// (display: table) y las demás se estiran hasta emparejar los bordes.
-// Sólo desde sm — en mobile el texto envuelve y quedaría agujereado.
-const JUSTIFICADO_CLASS =
-  "text-center sm:table sm:text-justify sm:[text-align-last:justify]";
 
-/** Renderiza el título enriquecido: cada bloque es una línea, los marks pintan color. */
-function Titulo({ bloques }: { bloques: CmsBlock[] }) {
+/** Renderiza una línea del título enriquecido; los marks pintan color. */
+function Linea({ block }: { block: CmsBlock }) {
   return (
     <>
-      {bloques.map((block, i) => (
-        <Fragment key={block._key ?? i}>
-          {block.children?.map((span, j) => {
-            const colorClass = span.marks?.map((m) => COLOR_MARK[m]).find(Boolean);
-            return colorClass ? (
-              <span key={j} className={colorClass}>
-                {span.text}
-              </span>
-            ) : (
-              <Fragment key={j}>{span.text}</Fragment>
-            );
-          })}
-          {i < bloques.length - 1 && <br />}
-        </Fragment>
-      ))}
+      {block.children?.map((span, j) => {
+        const colorClass = span.marks?.map((m) => COLOR_MARK[m]).find(Boolean);
+        return colorClass ? (
+          <span key={j} className={colorClass}>
+            {span.text}
+          </span>
+        ) : (
+          <Fragment key={j}>{span.text}</Fragment>
+        );
+      })}
     </>
   );
 }
 
-/** Título por defecto cuando el CMS no tiene contenido cargado. */
-function TituloDefault() {
-  return (
-    <>
-      Curated journeys
-      <br />
+/** Líneas del título: del CMS si hay contenido, si no el default de marca. */
+function lineasDelTitulo(bloques?: CmsBlock[]): ReactNode[] {
+  if (bloques?.length) {
+    return bloques.map((block, i) => <Linea key={block._key ?? i} block={block} />);
+  }
+  return [
+    <Fragment key="l1">Curated journeys</Fragment>,
+    <Fragment key="l2">
       for <span className="text-naranja">modern</span> explorers
-    </>
-  );
+    </Fragment>,
+  ];
 }
 
 interface HeroProps {
@@ -133,10 +126,21 @@ export function Hero({ data }: HeroProps) {
       >
         <h1
           className={`${tipografia} ${tamano} leading-[1.08] ${
-            esJustificado ? `max-w-full ${JUSTIFICADO_CLASS}` : "max-w-4xl"
+            esJustificado ? "w-full max-w-full" : "max-w-4xl"
           }`}
         >
-          {data?.titulo?.length ? <Titulo bloques={data.titulo} /> : <TituloDefault />}
+          {esJustificado ? (
+            // Justificado sin espacios extra: cada línea escala su tamaño
+            // para calzar en el ancho de la primera.
+            <FitLines>{lineasDelTitulo(data?.titulo)}</FitLines>
+          ) : (
+            lineasDelTitulo(data?.titulo).map((linea, i, arr) => (
+              <Fragment key={i}>
+                {linea}
+                {i < arr.length - 1 && <br />}
+              </Fragment>
+            ))
+          )}
         </h1>
 
         <div className={`mt-9 flex flex-wrap items-center gap-4 ${alineacion.wrap === "items-center" ? "justify-center" : ""}`}>
