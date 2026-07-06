@@ -60,7 +60,9 @@ export function Metodo({ data }: MetodoProps) {
               <span className="grid h-12 w-12 place-items-center rounded-full border border-cream/40 font-display text-lg text-naranja">
                 {i + 1}
               </span>
-              <h3 className="display text-lg leading-snug">{paso.title}</h3>
+              {/* flex-1: el título absorbe la altura sobrante y la línea
+                  divisoria queda alineada entre las 4 columnas */}
+              <h3 className="display flex-1 text-lg leading-snug">{paso.title}</h3>
               <p className="border-t border-cream/20 pt-3 font-serif text-sm leading-relaxed text-cream/75">
                 {paso.body}
               </p>

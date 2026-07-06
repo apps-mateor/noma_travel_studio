@@ -1,6 +1,8 @@
+import { Fragment } from "react";
 import { Section, Eyebrow } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { FilmImage } from "@/components/ui/FilmImage";
+import { FitLines } from "@/components/ui/FitLines";
 import { STUDIO, POSICIONAMIENTO, EQUIPO } from "@/lib/content";
 import { imgUrl, type CmsQuienesSomos } from "@/lib/cms";
 
@@ -65,16 +67,24 @@ export function Studio({ data }: StudioProps) {
           </div>
 
           <Reveal delay={120}>
-            <ul className="mt-9 flex flex-wrap gap-x-3 gap-y-2">
-              {POSICIONAMIENTO.map((word, i) => (
-                <li key={word} className="flex items-center gap-3">
-                  <span className="display text-lg text-brown sm:text-2xl">{word}</span>
-                  {i < POSICIONAMIENTO.length - 1 && (
-                    <span className="text-naranja">+</span>
-                  )}
-                </li>
-              ))}
-            </ul>
+            {/* Posicionamiento en una sola línea: FitLines lo escala al
+                ancho de la columna en cualquier pantalla */}
+            <p className="display mt-9 text-2xl text-brown">
+              <FitLines>
+                {[
+                  <Fragment key="posicionamiento">
+                    {POSICIONAMIENTO.map((word, i) => (
+                      <Fragment key={word}>
+                        {word}
+                        {i < POSICIONAMIENTO.length - 1 && (
+                          <span className="text-naranja"> + </span>
+                        )}
+                      </Fragment>
+                    ))}
+                  </Fragment>,
+                ]}
+              </FitLines>
+            </p>
           </Reveal>
         </div>
       </div>
