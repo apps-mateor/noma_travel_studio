@@ -4,6 +4,8 @@ import { imageSrc } from "@/lib/images";
 interface FilmImageProps {
   /** Seed de la imagen (ver lib/images.ts para cambiarla). */
   seed: string;
+  /** URL directa (ej: foto subida al CMS). Si está, pisa al seed. */
+  src?: string;
   alt: string;
   /** Atributo sizes para responsive (perf). */
   sizes?: string;
@@ -27,6 +29,7 @@ interface FilmImageProps {
  */
 export function FilmImage({
   seed,
+  src,
   alt,
   sizes = "100vw",
   className = "",
@@ -39,7 +42,7 @@ export function FilmImage({
   return (
     <div className={`${position} overflow-hidden ${className}`}>
       <Image
-        src={imageSrc(seed)}
+        src={src ?? imageSrc(seed)}
         alt={alt}
         fill
         sizes={sizes}

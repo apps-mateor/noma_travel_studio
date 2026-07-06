@@ -2,13 +2,29 @@ import { Section, Eyebrow } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { FilmImage } from "@/components/ui/FilmImage";
 import { STUDIO, POSICIONAMIENTO, EQUIPO } from "@/lib/content";
+import { cdnImage, type CmsQuienesSomos } from "@/lib/cms";
+
+interface StudioProps {
+  data?: CmsQuienesSomos | null;
+}
 
 /**
  * Quiénes somos: historia real de la marca + foto de equipo, el
  * posicionamiento (Curaduría · Mirada · Criterio · Experiencia) y
  * las 3 fotos individuales con bio al hover.
  */
-export function Studio() {
+export function Studio({ data }: StudioProps) {
+  const parrafos = data?.parrafos?.length ? data.parrafos : STUDIO.body;
+  const equipo = data?.equipo?.length
+    ? data.equipo.map((p, i) => ({
+        name: p.nombre ?? "",
+        role: p.rol ?? "",
+        bio: p.bio ?? "",
+        seed: `noma-equipo-${i + 1}`,
+        src: p.foto ? cdnImage(p.foto, 900) : undefined,
+      }))
+    : EQUIPO.map((p) => ({ ...p, src: undefined as string | undefined }));
+
   return (
     <Section id="studio" className="bg-celeste" width="wide">
       <div className="grid items-center gap-12 lg:grid-cols-12">
@@ -16,7 +32,8 @@ export function Studio() {
         <Reveal className="relative lg:col-span-5">
           <FilmImage
             seed="noma-studio"
-            alt="Viajera fotografiando una calle al atardecer"
+            src={data?.fotoEquipo ? cdnImage(data.fotoEquipo, 1200) : undefined}
+            alt="El equipo de noma"
             sizes="(max-width: 1024px) 100vw, 40vw"
             className="aspect-[4/5] w-full rounded-2xl"
           />
@@ -33,12 +50,12 @@ export function Studio() {
           <Reveal>
             <Eyebrow className="text-brown/60">{STUDIO.kicker}</Eyebrow>
             <h2 className="display mt-5 text-[clamp(2rem,4.5vw,3.6rem)]">
-              {STUDIO.title}
+              {data?.titulo ?? STUDIO.title}
             </h2>
           </Reveal>
 
           <div className="mt-7 space-y-5">
-            {STUDIO.body.map((p, i) => (
+            {parrafos.map((p, i) => (
               <Reveal key={i} delay={i * 90}>
                 <p className="max-w-xl font-serif text-lg leading-relaxed text-brown/85">
                   {p}
@@ -64,11 +81,12 @@ export function Studio() {
 
       {/* Equipo — hover (o foco) revela rol y background de cada una */}
       <div className="mt-16 grid gap-6 sm:grid-cols-3">
-        {EQUIPO.map((persona, i) => (
+        {equipo.map((persona, i) => (
           <Reveal key={persona.seed} delay={i * 90}>
             <article className="group relative overflow-hidden rounded-2xl" tabIndex={0}>
               <FilmImage
                 seed={persona.seed}
+                src={persona.src}
                 alt={`${persona.name} — ${persona.role}`}
                 sizes="(max-width: 640px) 100vw, 33vw"
                 className="aspect-[3/4] w-full [&>img]:group-hover:scale-105"

@@ -2,6 +2,7 @@ import { Section, Eyebrow } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { Seal } from "@/components/brand/Seal";
 import { CONTACT, whatsappHref } from "@/lib/site";
+import type { CmsContacto } from "@/lib/cms";
 
 const FIELD =
   "w-full rounded-xl border border-brown/20 bg-cream px-4 py-3 font-serif text-brown placeholder:text-brown/40 transition-colors focus:border-naranja focus:outline-none";
@@ -10,7 +11,11 @@ const FIELD =
  * Contacto — formulario visual (maquetado, no envía aún) + accesos
  * directos a WhatsApp, email e Instagram. El envío real se conecta luego.
  */
-export function Contacto() {
+interface ContactoProps {
+  data?: CmsContacto | null;
+}
+
+export function Contacto({ data }: ContactoProps) {
   return (
     <Section id="contacto" className="bg-celeste" width="wide">
       <div className="grid gap-12 lg:grid-cols-12">
@@ -19,11 +24,11 @@ export function Contacto() {
           <Reveal>
             <Eyebrow className="text-brown/60">Escribinos</Eyebrow>
             <h2 className="display mt-5 text-[clamp(2rem,5vw,3.6rem)]">
-              Contacto
+              {data?.titulo ?? "Contacto"}
             </h2>
             <p className="mt-6 max-w-md font-serif text-lg leading-relaxed text-brown/80">
-              Escuchamos antes de proponer. Contanos el contexto, el momento y el
-              estilo de viaje —el resto lo curamos nosotras.
+              {data?.intro ??
+                "Escuchamos antes de proponer. Contanos el contexto, el momento y el estilo de viaje —el resto lo curamos nosotras."}
             </p>
           </Reveal>
 

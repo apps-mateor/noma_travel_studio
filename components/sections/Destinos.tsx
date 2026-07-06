@@ -3,31 +3,46 @@ import { Reveal } from "@/components/ui/Reveal";
 import { FilmImage } from "@/components/ui/FilmImage";
 import { Button } from "@/components/ui/Button";
 import { DESTINOS } from "@/lib/content";
+import { cdnImage, type CmsDestinos } from "@/lib/cms";
+
+interface DestinosProps {
+  data?: CmsDestinos | null;
+}
 
 /**
  * Destinos — carrusel horizontal con scroll-snap (sin JS), formato
  * "tira de película" editorial. Cada tarjeta es un destino curado.
  */
-export function Destinos() {
+export function Destinos({ data }: DestinosProps) {
+  const destinos = data?.lista?.length
+    ? data.lista.map((d, i) => ({
+        name: d.nombre ?? "",
+        place: d.lugar ?? "",
+        note: d.nota ?? "",
+        seed: `noma-destino-${i + 1}`,
+        src: d.foto ? cdnImage(d.foto, 1000) : undefined,
+      }))
+    : DESTINOS.map((d) => ({ ...d, src: undefined as string | undefined }));
+
   return (
     <Section id="destinos" className="bg-verde text-cream" width="wide">
       <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <Reveal>
           <Eyebrow className="text-cream/50">A dónde</Eyebrow>
           <h2 className="display mt-5 text-[clamp(2rem,5vw,4rem)]">
-            Destinos con mirada
+            {data?.titulo ?? "Destinos con mirada"}
           </h2>
         </Reveal>
         <Reveal delay={100}>
           <p className="max-w-sm font-serif leading-relaxed text-cream/75">
-            No las fotos típicas de siempre. Lugares elegidos por lo que se vive
-            en ellos —arrastrá para explorar.
+            {data?.intro ??
+              "No las fotos típicas de siempre. Lugares elegidos por lo que se vive en ellos —arrastrá para explorar."}
           </p>
         </Reveal>
       </div>
 
       <div className="no-scrollbar mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4">
-        {DESTINOS.map((d, i) => (
+        {destinos.map((d, i) => (
           <Reveal
             key={d.name}
             delay={(i % 3) * 80}
@@ -37,6 +52,7 @@ export function Destinos() {
               <div className="relative overflow-hidden rounded-2xl">
                 <FilmImage
                   seed={d.seed}
+                  src={d.src}
                   alt={`${d.name}, ${d.place}`}
                   sizes="(max-width: 640px) 78vw, (max-width: 1024px) 42vw, 27vw"
                   className="aspect-[3/4] w-full [&>img]:transition-transform [&>img]:duration-700 [&>img]:group-hover:scale-105"
