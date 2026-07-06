@@ -2,7 +2,7 @@ import { Section, Eyebrow } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { FilmImage } from "@/components/ui/FilmImage";
 import { STUDIO, POSICIONAMIENTO, EQUIPO } from "@/lib/content";
-import { cdnImage, type CmsQuienesSomos } from "@/lib/cms";
+import { imgUrl, type CmsQuienesSomos } from "@/lib/cms";
 
 interface StudioProps {
   data?: CmsQuienesSomos | null;
@@ -21,7 +21,7 @@ export function Studio({ data }: StudioProps) {
         role: p.rol ?? "",
         bio: p.bio ?? "",
         seed: `noma-equipo-${i + 1}`,
-        src: p.foto ? cdnImage(p.foto, 900) : undefined,
+        src: imgUrl(p.foto, 900),
       }))
     : EQUIPO.map((p) => ({ ...p, src: undefined as string | undefined }));
 
@@ -32,7 +32,7 @@ export function Studio({ data }: StudioProps) {
         <Reveal className="relative lg:col-span-5">
           <FilmImage
             seed="noma-studio"
-            src={data?.fotoEquipo ? cdnImage(data.fotoEquipo, 1200) : undefined}
+            src={imgUrl(data?.fotoEquipo, 1200)}
             alt="El equipo de noma"
             sizes="(max-width: 1024px) 100vw, 40vw"
             className="aspect-[4/5] w-full rounded-2xl"

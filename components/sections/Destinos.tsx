@@ -3,7 +3,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { FilmImage } from "@/components/ui/FilmImage";
 import { Button } from "@/components/ui/Button";
 import { DESTINOS } from "@/lib/content";
-import { cdnImage, type CmsDestinos } from "@/lib/cms";
+import { imgUrl, type CmsDestinos } from "@/lib/cms";
 
 interface DestinosProps {
   data?: CmsDestinos | null;
@@ -20,7 +20,7 @@ export function Destinos({ data }: DestinosProps) {
         place: d.lugar ?? "",
         note: d.nota ?? "",
         seed: `noma-destino-${i + 1}`,
-        src: d.foto ? cdnImage(d.foto, 1000) : undefined,
+        src: imgUrl(d.foto, 1000),
       }))
     : DESTINOS.map((d) => ({ ...d, src: undefined as string | undefined }));
 

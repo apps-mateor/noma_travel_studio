@@ -1,5 +1,6 @@
 import { createClient } from "next-sanity";
 import { defineLive } from "next-sanity/live";
+import imageUrlBuilder from "@sanity/image-url";
 import { projectId, dataset, apiVersion, cmsEnabled } from "@/sanity/env";
 
 // ──────────────────────────────────────────────────────────────────
@@ -39,12 +40,19 @@ export type CmsConcepto = {
   recuadros?: CmsRecuadro[];
 };
 
-export type CmsIntegrante = { nombre?: string; rol?: string; bio?: string; foto?: string };
+// Imagen de Sanity con su recorte/hotspot (lo que edita el admin).
+export type CmsImagen = {
+  asset?: { _ref?: string };
+  crop?: unknown;
+  hotspot?: unknown;
+};
+
+export type CmsIntegrante = { nombre?: string; rol?: string; bio?: string; foto?: CmsImagen };
 
 export type CmsQuienesSomos = {
   titulo?: string;
   parrafos?: string[];
-  fotoEquipo?: string;
+  fotoEquipo?: CmsImagen;
   equipo?: CmsIntegrante[];
 };
 
@@ -57,7 +65,7 @@ export type CmsComoTrabajamos = {
   pasos?: CmsPilar[];
 };
 
-export type CmsDestino = { nombre?: string; lugar?: string; nota?: string; foto?: string };
+export type CmsDestino = { nombre?: string; lugar?: string; nota?: string; foto?: CmsImagen };
 
 export type CmsDestinos = { titulo?: string; intro?: string; lista?: CmsDestino[] };
 
@@ -104,14 +112,14 @@ const QUERY = /* groq */ `{
   },
   "quienesSomos": *[_type == "quienesSomos"][0]{
     titulo, parrafos,
-    "fotoEquipo": fotoEquipo.asset->url,
-    equipo[]{nombre, rol, bio, "foto": foto.asset->url}
+    fotoEquipo{asset, crop, hotspot},
+    equipo[]{nombre, rol, bio, foto{asset, crop, hotspot}}
   },
   "comoTrabajamos": *[_type == "comoTrabajamos"][0]{
     titulo, intro, pilares[]{titulo, texto}, pasos[]{titulo, texto}
   },
   "destinos": *[_type == "destinos"][0]{
-    titulo, intro, lista[]{nombre, lugar, nota, "foto": foto.asset->url}
+    titulo, intro, lista[]{nombre, lugar, nota, foto{asset, crop, hotspot}}
   },
   "contacto": *[_type == "contacto"][0]{titulo, intro}
 }`;
@@ -146,4 +154,15 @@ export async function getSiteContent(): Promise<SiteContent> {
 export function cdnImage(url: string, w: number): string {
   const sep = url.includes("?") ? "&" : "?";
   return `${url}${sep}auto=format&w=${w}&q=80`;
+}
+
+const builder = cmsEnabled ? imageUrlBuilder({ projectId, dataset }) : null;
+
+/**
+ * URL de una imagen del CMS respetando el recorte y el hotspot que se
+ * marcaron en el admin (lápiz sobre la foto → "Edit hotspot/crop").
+ */
+export function imgUrl(img: CmsImagen | undefined, w: number): string | undefined {
+  if (!builder || !img?.asset?._ref) return undefined;
+  return builder.image(img).width(w).auto("format").quality(80).url();
 }
