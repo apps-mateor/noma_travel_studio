@@ -25,7 +25,7 @@ export function Contacto({ data }: ContactoProps) {
   const instagramHandle = data?.instagram || CONTACT.instagramHandle;
 
   return (
-    <Section id="contacto" className="bg-celeste" width="wide">
+    <Section id="contacto" className="bg-celeste !pb-14" width="wide">
       <div className="grid gap-12 lg:grid-cols-12">
         {/* Intro */}
         <div className="lg:col-span-5">

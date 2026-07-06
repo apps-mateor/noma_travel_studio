@@ -21,9 +21,9 @@ export function SiteFooter({
     <footer className="relative overflow-hidden bg-celeste text-brown">
       <WhatsAppFab whatsappLink={whatsappLink} />
 
-      <div className="mx-auto max-w-[1400px] border-t border-brown/15 px-5 pb-12 pt-4 sm:px-8">
+      <div className="mx-auto max-w-[1400px] border-t border-brown/15 px-5 pb-8 sm:px-8">
         {/* Columnas */}
-        <div className="grid grid-cols-2 gap-8 py-12 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-8 py-8 md:grid-cols-4">
           <nav aria-label="Páginas" className="flex flex-col gap-3">
             <p className="eyebrow text-brown/50">Navegá</p>
             {FOOTER_LINKS.map((link) => (
