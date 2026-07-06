@@ -63,6 +63,11 @@ export function Contacto({ data }: ContactoProps) {
               </a>
             </div>
           </Reveal>
+
+          {/* Sello giratorio "curated by noma" */}
+          <Reveal delay={200}>
+            <Seal className="mt-14 w-28 text-brown md:w-36" />
+          </Reveal>
         </div>
 
         {/* Formulario visual */}
@@ -73,7 +78,6 @@ export function Contacto({ data }: ContactoProps) {
             action={whatsappHref()}
             method="get"
           >
-            <Seal className="absolute -top-8 right-6 hidden w-16 text-brown sm:block" />
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="flex flex-col gap-2">
                 <span className="eyebrow text-brown/60">Nombre</span>
