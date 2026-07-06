@@ -2,11 +2,11 @@
 // arranque con todo pre-cargado en vez de campos vacíos.
 //
 // Uso:
-//   SANITY_WRITE_TOKEN=<token> node scripts/seed-cms.mjs
+//   NEXT_PUBLIC_SANITY_PROJECT_ID=xxx SANITY_WRITE_TOKEN=yyy node scripts/seed-cms.mjs
 //
-// El token se crea en https://sanity.io/manage → API → Tokens
-// (permiso "Editor"). Correr UNA sola vez; si se corre de nuevo,
-// pisa lo que haya editado tu equipo en el admin.
+// El token puede ser el del login del CLI (~/.config/sanity/config.json)
+// o uno creado en sanity.io/manage → API → Tokens (permiso Editor).
+// Correr UNA sola vez; si se corre de nuevo, pisa lo editado en el admin.
 
 import { createClient } from "next-sanity";
 
@@ -15,11 +15,7 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 const token = process.env.SANITY_WRITE_TOKEN;
 
 if (!projectId || !token) {
-  console.error(
-    "Faltan variables: NEXT_PUBLIC_SANITY_PROJECT_ID y SANITY_WRITE_TOKEN.\n" +
-      "Tip: cargalas en .env.local y corré:  npx dotenv -e .env.local -- node scripts/seed-cms.mjs\n" +
-      "o pasalas inline:  NEXT_PUBLIC_SANITY_PROJECT_ID=xxx SANITY_WRITE_TOKEN=yyy node scripts/seed-cms.mjs",
-  );
+  console.error("Faltan variables: NEXT_PUBLIC_SANITY_PROJECT_ID y SANITY_WRITE_TOKEN.");
   process.exit(1);
 }
 
