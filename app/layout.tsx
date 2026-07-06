@@ -4,7 +4,8 @@ import { presicav, newSpirit, railwayGank } from "./fonts";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nomatravelstudio.com"),
+  // www es el dominio principal en Vercel; el apex redirige acá.
+  metadataBase: new URL("https://www.nomatravelstudio.com"),
   title: {
     default: "NOMA - Travel Studio",
     template: "%s · NOMA - Travel Studio",
