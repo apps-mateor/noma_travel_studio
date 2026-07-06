@@ -1,16 +1,21 @@
 import { Fragment } from "react";
 import { Button } from "@/components/ui/Button";
 import { imageSrc } from "@/lib/images";
-import { cdnImage, type CmsHero, type CmsEstilo } from "@/lib/cms";
+import { cdnImage, type CmsHero, type CmsEstilo, type CmsBlock } from "@/lib/cms";
 
 // 👉 VIDEO DEL HERO — poné tu video en /public/videos/hero.mp4
 //    (mp4 comprimido, ideal < 8mb, sin audio) o subilo directo desde
 //    el admin en "Fondo". Mientras no exista, se muestra la imagen.
 const HERO_VIDEO = "/videos/hero.mp4";
 
-const DEFAULT_TITULO = "Curated journeys\nfor modern explorers";
-const DEFAULT_PALABRA = "modern";
 const DEFAULT_SUBTITULO = "Viajes a medida, desde la escucha y el criterio";
+
+// Colores de marca disponibles como marks en el título enriquecido.
+const COLOR_MARK: Record<string, string> = {
+  naranja: "text-naranja",
+  verde: "text-verde",
+  marron: "text-brown",
+};
 
 // Presets de estilo editables desde el admin. Acotados a la identidad
 // de marca: tipografías del brandbook y escalas que no rompen el layout.
@@ -35,28 +40,36 @@ const ALINEACION: Record<
   derecha: { wrap: "items-end", text: "text-right" },
 };
 
-/** Renderiza el título respetando saltos de línea y pintando la palabra naranja. */
-function Titulo({ texto, palabra }: { texto: string; palabra?: string }) {
-  const lines = texto.split("\n");
+/** Renderiza el título enriquecido: cada bloque es una línea, los marks pintan color. */
+function Titulo({ bloques }: { bloques: CmsBlock[] }) {
   return (
     <>
-      {lines.map((line, i) => {
-        const at = palabra ? line.indexOf(palabra) : -1;
-        return (
-          <Fragment key={i}>
-            {at >= 0 && palabra ? (
-              <>
-                {line.slice(0, at)}
-                <span className="text-naranja">{palabra}</span>
-                {line.slice(at + palabra.length)}
-              </>
+      {bloques.map((block, i) => (
+        <Fragment key={block._key ?? i}>
+          {block.children?.map((span, j) => {
+            const colorClass = span.marks?.map((m) => COLOR_MARK[m]).find(Boolean);
+            return colorClass ? (
+              <span key={j} className={colorClass}>
+                {span.text}
+              </span>
             ) : (
-              line
-            )}
-            {i < lines.length - 1 && <br />}
-          </Fragment>
-        );
-      })}
+              <Fragment key={j}>{span.text}</Fragment>
+            );
+          })}
+          {i < bloques.length - 1 && <br />}
+        </Fragment>
+      ))}
+    </>
+  );
+}
+
+/** Título por defecto cuando el CMS no tiene contenido cargado. */
+function TituloDefault() {
+  return (
+    <>
+      Curated journeys
+      <br />
+      for <span className="text-naranja">modern</span> explorers
     </>
   );
 }
@@ -112,10 +125,7 @@ export function Hero({ data }: HeroProps) {
         className={`relative z-10 flex w-full max-w-[1400px] flex-col px-5 pb-16 pt-32 sm:px-8 ${alineacion.wrap} ${alineacion.text}`}
       >
         <h1 className={`${tipografia} ${tamano} max-w-4xl leading-[1.08]`}>
-          <Titulo
-            texto={data?.titulo ?? DEFAULT_TITULO}
-            palabra={data?.palabraNaranja ?? DEFAULT_PALABRA}
-          />
+          {data?.titulo?.length ? <Titulo bloques={data.titulo} /> : <TituloDefault />}
         </h1>
 
         <p className="mt-5 max-w-xl font-display text-[0.72rem] uppercase tracking-[0.22em] text-cream/85">

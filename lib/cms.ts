@@ -18,10 +18,13 @@ export type CmsEstilo = {
   alineacion?: "izquierda" | "centro" | "derecha";
 };
 
+// Título enriquecido: cada bloque es una línea; los marks son colores.
+export type CmsSpan = { _type: "span"; text: string; marks?: string[] };
+export type CmsBlock = { _type: "block"; _key: string; children: CmsSpan[] };
+
 export type CmsHero = {
-  titulo?: string;
+  titulo?: CmsBlock[];
   estilo?: CmsEstilo;
-  palabraNaranja?: string;
   subtitulo?: string;
   fondo?: { url?: string; mimeType?: string };
 };
@@ -93,7 +96,7 @@ export const { sanityFetch, SanityLive } = defineLive({
 // Un solo fetch para toda la home. Las imágenes se resuelven a URL del CDN.
 const QUERY = /* groq */ `{
   "hero": *[_type == "hero"][0]{
-    titulo, estilo, palabraNaranja, subtitulo,
+    titulo, estilo, subtitulo,
     "fondo": fondo.asset->{url, mimeType}
   },
   "concepto": *[_type == "concepto"][0]{

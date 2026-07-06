@@ -25,9 +25,28 @@ const docs = [
   {
     _id: "hero",
     _type: "hero",
-    titulo: "Curated journeys\nfor modern explorers",
+    // Título enriquecido: cada bloque es una línea; marks = color de marca.
+    titulo: [
+      {
+        _type: "block",
+        _key: "l1",
+        style: "normal",
+        markDefs: [],
+        children: [{ _type: "span", _key: "s1", text: "Curated journeys", marks: [] }],
+      },
+      {
+        _type: "block",
+        _key: "l2",
+        style: "normal",
+        markDefs: [],
+        children: [
+          { _type: "span", _key: "s2", text: "for ", marks: [] },
+          { _type: "span", _key: "s3", text: "modern", marks: ["naranja"] },
+          { _type: "span", _key: "s4", text: " explorers", marks: [] },
+        ],
+      },
+    ],
     estilo: { tipografia: "display", tamano: "mediano", alineacion: "centro" },
-    palabraNaranja: "modern",
     subtitulo: "Viajes a medida, desde la escucha y el criterio",
   },
   {

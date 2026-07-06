@@ -1,4 +1,18 @@
+import { createElement } from "react";
 import { defineField, defineType } from "sanity";
+
+// Paleta de marca para pintar palabras del título desde el editor.
+const COLOR_DECORATORS = [
+  { title: "Naranja", value: "naranja", hex: "#db5c35" },
+  { title: "Verde", value: "verde", hex: "#2b3a2a" },
+  { title: "Marrón", value: "marron", hex: "#59392b" },
+].map((c) => ({
+  title: c.title,
+  value: c.value,
+  icon: () => createElement("span", { style: { color: c.hex, fontWeight: 700 } }, "A"),
+  component: (props: { children?: React.ReactNode }) =>
+    createElement("span", { style: { color: c.hex } }, props.children),
+}));
 
 export const hero = defineType({
   name: "hero",
@@ -8,10 +22,20 @@ export const hero = defineType({
     defineField({
       name: "titulo",
       title: "Título grande",
-      description: "El texto principal de la portada. Usá saltos de línea para cortarlo.",
-      type: "text",
-      rows: 2,
-      initialValue: "Curated journeys\nfor modern explorers",
+      description:
+        "Enter corta la línea. Para pintar una palabra: seleccionala y tocá la 'A' del color en la barra.",
+      type: "array",
+      of: [
+        {
+          type: "block",
+          styles: [],
+          lists: [],
+          marks: {
+            decorators: COLOR_DECORATORS,
+            annotations: [],
+          },
+        },
+      ],
     }),
     defineField({
       name: "estilo",
@@ -62,13 +86,6 @@ export const hero = defineType({
           initialValue: "centro",
         }),
       ],
-    }),
-    defineField({
-      name: "palabraNaranja",
-      title: "Palabra en naranja",
-      description: "Qué palabra del título se pinta de naranja (tiene que estar escrita igual en el título).",
-      type: "string",
-      initialValue: "modern",
     }),
     defineField({
       name: "subtitulo",
