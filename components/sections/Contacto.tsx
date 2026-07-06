@@ -78,9 +78,9 @@ export function Contacto({ data }: ContactoProps) {
           </Reveal>
         </div>
 
-        {/* Formulario — arma el mensaje de WhatsApp con todos los campos */}
+        {/* Formulario — la consulta llega por email a la casilla del admin */}
         <Reveal delay={80} className="lg:col-span-7">
-          <ContactForm whatsappLink={whatsappLink} />
+          <ContactForm email={email} />
         </Reveal>
       </div>
     </Section>

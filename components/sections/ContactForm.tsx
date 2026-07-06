@@ -5,40 +5,49 @@ import { useState, type FormEvent } from "react";
 const FIELD =
   "w-full rounded-xl border border-brown/20 bg-cream px-4 py-3 font-serif text-brown placeholder:text-brown/40 transition-colors focus:border-naranja focus:outline-none";
 
+type Estado = "idle" | "enviando" | "ok" | "error";
+
 interface ContactFormProps {
-  /** Link wa.me destino (número cargado en el admin). */
-  whatsappLink: string;
+  /** Casilla que recibe las consultas (se edita en el admin → Contacto). */
+  email: string;
 }
 
 /**
- * Formulario de contacto: arma un mensaje de WhatsApp con todos los
- * campos y abre el chat listo para enviar. No pierde ningún dato.
+ * Formulario de contacto — envía la consulta por email (FormSubmit).
+ * ⚠️ Primera vez: FormSubmit manda un mail de activación a la casilla
+ * destino; hay que clickear "Activate" una única vez para empezar a recibir.
  */
-export function ContactForm({ whatsappLink }: ContactFormProps) {
-  const [enviando, setEnviando] = useState(false);
+export function ContactForm({ email }: ContactFormProps) {
+  const [estado, setEstado] = useState<Estado>("idle");
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const f = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const f = new FormData(form);
     const campo = (name: string) => String(f.get(name) ?? "").trim();
 
-    const lineas = [
-      "Hola noma, quiero empezar a planear un viaje.",
-      campo("nombre") && `Soy ${campo("nombre")}.`,
-      campo("tipo") && `Tipo de viaje: ${campo("tipo")}.`,
-      campo("fecha") && `Cuándo: ${campo("fecha")}.`,
-      campo("mensaje"),
-      campo("email") && `Mi email: ${campo("email")}`,
-    ].filter(Boolean);
-
-    const sep = whatsappLink.includes("?") ? "&" : "?";
-    setEnviando(true);
-    window.open(
-      `${whatsappLink}${sep}text=${encodeURIComponent(lineas.join("\n"))}`,
-      "_blank",
-      "noopener,noreferrer",
-    );
-    setEnviando(false);
+    setEstado("enviando");
+    try {
+      const res = await fetch(`https://formsubmit.co/ajax/${email}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          _subject: `Nueva consulta desde la web — ${campo("nombre") || "sin nombre"}`,
+          _template: "table",
+          _captcha: "false",
+          Nombre: campo("nombre"),
+          Email: campo("email"),
+          "Tipo de viaje": campo("tipo"),
+          Cuándo: campo("fecha"),
+          Mensaje: campo("mensaje"),
+        }),
+      });
+      if (!res.ok) throw new Error(`FormSubmit ${res.status}`);
+      setEstado("ok");
+      form.reset();
+    } catch {
+      setEstado("error");
+    }
   }
 
   return (
@@ -49,11 +58,11 @@ export function ContactForm({ whatsappLink }: ContactFormProps) {
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="flex flex-col gap-2">
           <span className="eyebrow text-brown/60">Nombre</span>
-          <input className={FIELD} type="text" name="nombre" placeholder="Cómo te llamás" />
+          <input className={FIELD} type="text" name="nombre" placeholder="Cómo te llamás" required />
         </label>
         <label className="flex flex-col gap-2">
           <span className="eyebrow text-brown/60">Email</span>
-          <input className={FIELD} type="email" name="email" placeholder="tu@email.com" />
+          <input className={FIELD} type="email" name="email" placeholder="tu@email.com" required />
         </label>
         <label className="flex flex-col gap-2">
           <span className="eyebrow text-brown/60">Tipo de viaje</span>
@@ -75,15 +84,26 @@ export function ContactForm({ whatsappLink }: ContactFormProps) {
 
       <button
         type="submit"
-        disabled={enviando}
-        className="group mt-6 inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-brown px-7 py-4 font-display text-sm uppercase tracking-[0.16em] text-cream transition-all duration-300 hover:-translate-y-0.5 hover:bg-naranja sm:w-auto"
+        disabled={estado === "enviando"}
+        className="group mt-6 inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-brown px-7 py-4 font-display text-sm uppercase tracking-[0.16em] text-cream transition-all duration-300 hover:-translate-y-0.5 hover:bg-naranja disabled:opacity-60 sm:w-auto"
       >
-        Empezar a planear
+        {estado === "enviando" ? "Enviando…" : "Empezar a planear"}
         <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
       </button>
-      <p className="mt-4 font-serif text-sm italic text-brown/55">
-        Se abre WhatsApp con tu mensaje armado, listo para enviar.
-      </p>
+
+      {estado === "ok" ? (
+        <p className="mt-4 font-serif text-sm italic text-verde">
+          ¡Listo! Nos llegó tu consulta. Te respondemos a la brevedad.
+        </p>
+      ) : estado === "error" ? (
+        <p className="mt-4 font-serif text-sm italic text-naranja">
+          Ups, no pudimos enviar el mensaje. Probá de nuevo o escribinos por WhatsApp.
+        </p>
+      ) : (
+        <p className="mt-4 font-serif text-sm italic text-brown/55">
+          Te respondemos a la brevedad. Sin urgencias, con criterio.
+        </p>
+      )}
     </form>
   );
 }
