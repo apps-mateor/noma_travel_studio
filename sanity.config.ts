@@ -2,6 +2,7 @@
 
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
+import { presentationTool } from "sanity/presentation";
 import { esESLocale } from "@sanity/locale-es-es";
 import { projectId, dataset } from "./sanity/env";
 import { schemaTypes, SINGLETONS } from "./sanity/schemas";
@@ -19,7 +20,16 @@ export default defineConfig({
   dataset,
   basePath: "/admin",
   plugins: [
+    // Vista "Presentación": el sitio real embebido con click-to-edit
+    // y cambios en vivo antes de publicar.
+    presentationTool({
+      title: "Vista del sitio",
+      previewUrl: {
+        previewMode: { enable: "/api/draft-mode/enable" },
+      },
+    }),
     structureTool({
+      title: "Secciones",
       structure: (S) =>
         S.list()
           .title("Secciones del sitio")

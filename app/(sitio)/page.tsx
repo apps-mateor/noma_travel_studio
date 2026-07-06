@@ -6,9 +6,7 @@ import { Destinos } from "@/components/sections/Destinos";
 import { Contacto } from "@/components/sections/Contacto";
 import { getSiteContent } from "@/lib/cms";
 
-// Refresca el contenido del CMS como máximo cada 60s.
-export const revalidate = 60;
-
+// El contenido se refresca solo: SanityLive revalida al publicar en el admin.
 export default async function Home() {
   const cms = await getSiteContent();
 

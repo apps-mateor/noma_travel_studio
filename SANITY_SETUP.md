@@ -1,8 +1,14 @@
 # Admin del sitio (Sanity) — pasos para activarlo
 
-El admin vive en **`/admin`** (ej: `https://tusitio.com/admin`). Cada sección de la
-home es una "zona" fija que se puede editar pero no borrar. Si el CMS no está
-configurado o una sección está vacía, el sitio usa los textos por defecto del código.
+El admin vive en **`/admin`** (ej: `https://tusitio.com/admin`) y tiene dos vistas:
+
+- **Vista del sitio** (Presentación): la página real embebida — clickeás sobre
+  cualquier texto/foto, se abre el campo, y ves el cambio en vivo antes de
+  publicar con el botón "Publicar".
+- **Secciones**: las mismas 6 zonas en formato formulario.
+
+Si el CMS no está configurado o una sección está vacía, el sitio usa los
+textos por defecto del código.
 
 ## 1. Crear el proyecto en Sanity (una sola vez)
 
@@ -21,9 +27,12 @@ Crear `.env.local` en la raíz:
 ```bash
 NEXT_PUBLIC_SANITY_PROJECT_ID=<el projectId>
 NEXT_PUBLIC_SANITY_DATASET=production
+# Token con rol "viewer" — habilita la vista en vivo (Presentación).
+# Se crea en sanity.io/manage → API → Tokens.
+SANITY_API_READ_TOKEN=<token viewer>
 ```
 
-Y cargar las mismas dos variables en **Vercel** (Settings → Environment Variables)
+Y cargar las mismas tres variables en **Vercel** (Settings → Environment Variables)
 y redeployar.
 
 ## 3. Permitir el dominio (CORS)

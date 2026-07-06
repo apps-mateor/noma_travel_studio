@@ -1,4 +1,5 @@
 import { createClient } from "next-sanity";
+import { defineLive } from "next-sanity/live";
 import { projectId, dataset, apiVersion, cmsEnabled } from "@/sanity/env";
 
 // ──────────────────────────────────────────────────────────────────
@@ -6,6 +7,9 @@ import { projectId, dataset, apiVersion, cmsEnabled } from "@/sanity/env";
 //  Si el CMS no está configurado (sin NEXT_PUBLIC_SANITY_PROJECT_ID)
 //  o una sección no fue cargada todavía, el sitio usa el contenido
 //  por defecto de lib/content.ts. Nada se rompe.
+//
+//  El token (SANITY_API_READ_TOKEN, rol viewer) habilita la vista
+//  previa en vivo del admin: /admin → Presentación.
 // ──────────────────────────────────────────────────────────────────
 
 export type CmsHero = {
@@ -60,9 +64,25 @@ export type SiteContent = {
   contacto: CmsContacto | null;
 };
 
-const client = cmsEnabled
-  ? createClient({ projectId, dataset, apiVersion, useCdn: true })
-  : null;
+const token = process.env.SANITY_API_READ_TOKEN;
+
+export const client = createClient({
+  projectId: projectId || "unconfigured",
+  dataset,
+  apiVersion,
+  useCdn: true,
+  // stega marca el HTML para que el admin sepa qué campo es cada texto
+  // (overlays de click-to-edit en la vista "Presentación").
+  stega: { studioUrl: "/admin" },
+});
+
+// sanityFetch entrega drafts en vivo dentro del admin y contenido
+// publicado (cacheado + revalidado por eventos) en el sitio público.
+export const { sanityFetch, SanityLive } = defineLive({
+  client,
+  serverToken: token,
+  browserToken: token,
+});
 
 // Un solo fetch para toda la home. Las imágenes se resuelven a URL del CDN.
 const QUERY = /* groq */ `{
@@ -102,10 +122,10 @@ const EMPTY: SiteContent = {
  * no está configurado o la sección no existe todavía.
  */
 export async function getSiteContent(): Promise<SiteContent> {
-  if (!client) return EMPTY;
+  if (!cmsEnabled) return EMPTY;
   try {
-    const data = await client.fetch<SiteContent>(QUERY);
-    return { ...EMPTY, ...data };
+    const { data } = await sanityFetch({ query: QUERY });
+    return { ...EMPTY, ...(data as SiteContent) };
   } catch (error: unknown) {
     // Si Sanity no responde, el sitio sigue funcionando con el
     // contenido por defecto. Se loguea para diagnóstico en Vercel.

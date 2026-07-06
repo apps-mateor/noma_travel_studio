@@ -1,13 +1,21 @@
+import { draftMode } from "next/headers";
+import { VisualEditing } from "next-sanity/visual-editing";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { SanityLive } from "@/lib/cms";
+import { cmsEnabled } from "@/sanity/env";
 
 /**
  * Layout del sitio público: header, footer, FAB de WhatsApp y grano.
  * Vive en el route group (sitio) para que /admin quede limpio.
+ * SanityLive refresca el contenido publicado; VisualEditing activa los
+ * overlays de click-to-edit cuando se mira desde /admin → Presentación.
  */
-export default function SitioLayout({
+export default async function SitioLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const { isEnabled: isDraft } = await draftMode();
+
   return (
     <>
       <a
@@ -22,6 +30,8 @@ export default function SitioLayout({
       </main>
       <SiteFooter />
       <div className="grain" aria-hidden />
+      {cmsEnabled && <SanityLive />}
+      {cmsEnabled && isDraft && <VisualEditing />}
     </>
   );
 }
