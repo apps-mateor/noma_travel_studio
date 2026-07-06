@@ -1,13 +1,24 @@
 import Link from "next/link";
-import { CONTACT, FOOTER_LINKS, SITE, whatsappHref } from "@/lib/site";
+import { CONTACT, FOOTER_LINKS, SITE, instagramUrl, whatsappHref } from "@/lib/site";
 import { WhatsAppFab } from "./WhatsAppFab";
 
-export function SiteFooter() {
+interface SiteFooterProps {
+  /** Datos de contacto cargados en el admin (fallback: lib/site.ts). */
+  whatsappLink?: string;
+  email?: string;
+  instagramHandle?: string;
+}
+
+export function SiteFooter({
+  whatsappLink = CONTACT.whatsappLink,
+  email = CONTACT.email,
+  instagramHandle = CONTACT.instagramHandle,
+}: SiteFooterProps) {
   const year = 2025; // Fundación de la marca; estático para evitar drift.
 
   return (
     <footer className="relative overflow-hidden bg-verde text-cream">
-      <WhatsAppFab />
+      <WhatsAppFab whatsappLink={whatsappLink} />
 
       <div className="mx-auto max-w-[1400px] px-5 pb-12 pt-4 sm:px-8">
         {/* Columnas */}
@@ -27,18 +38,18 @@ export function SiteFooter() {
 
           <div className="flex flex-col gap-3">
             <p className="eyebrow text-cream/50">Escribinos</p>
-            <a href={whatsappHref()} target="_blank" rel="noopener noreferrer" className="w-fit text-cream/90 transition-colors hover:text-naranja">
+            <a href={whatsappHref(undefined, whatsappLink)} target="_blank" rel="noopener noreferrer" className="w-fit text-cream/90 transition-colors hover:text-naranja">
               WhatsApp
             </a>
-            <a href={`mailto:${CONTACT.email}`} className="w-fit text-cream/90 transition-colors hover:text-naranja">
-              {CONTACT.email}
+            <a href={`mailto:${email}`} className="w-fit text-cream/90 transition-colors hover:text-naranja">
+              {email}
             </a>
           </div>
 
           <div className="flex flex-col gap-3">
             <p className="eyebrow text-cream/50">Seguinos</p>
-            <a href={CONTACT.instagram} target="_blank" rel="noopener noreferrer" className="w-fit text-cream/90 transition-colors hover:text-naranja">
-              Instagram {CONTACT.instagramHandle}
+            <a href={instagramUrl(instagramHandle)} target="_blank" rel="noopener noreferrer" className="w-fit text-cream/90 transition-colors hover:text-naranja">
+              Instagram {instagramHandle}
             </a>
           </div>
 

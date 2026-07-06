@@ -27,8 +27,20 @@ export const destinos = defineType({
           type: "object",
           fields: [
             defineField({ name: "nombre", title: "Nombre (ej: Japón)", type: "string" }),
-            defineField({ name: "lugar", title: "Lugar (ej: Kioto · Tokio)", type: "string" }),
+            defineField({
+              name: "lugar",
+              title: "Lugar (ej: Kioto · Tokio)",
+              description: "Es lo que se ve en la etiqueta verde sobre la foto.",
+              type: "string",
+            }),
             defineField({ name: "nota", title: "Nota corta", type: "string" }),
+            defineField({
+              name: "link",
+              title: "Link (opcional)",
+              description:
+                "A dónde lleva la tarjeta al hacer click. Puede ser una URL completa (https://…) o una página del sitio (/destinos).",
+              type: "string",
+            }),
             defineField({ name: "foto", title: "Foto", type: "image", options: { hotspot: true } }),
           ],
           preview: { select: { title: "nombre", subtitle: "lugar", media: "foto" } },

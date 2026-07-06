@@ -1,13 +1,18 @@
-import { whatsappHref } from "@/lib/site";
+import { CONTACT, whatsappHref } from "@/lib/site";
+
+interface WhatsAppFabProps {
+  /** Link wa.me (viene del número cargado en el admin). */
+  whatsappLink?: string;
+}
 
 /**
  * Botón flotante de WhatsApp (esquina inferior derecha).
- * El link se configura una sola vez en lib/site.ts -> CONTACT.whatsappLink.
+ * El número se carga en el admin (sección Contacto); fallback en lib/site.ts.
  */
-export function WhatsAppFab() {
+export function WhatsAppFab({ whatsappLink = CONTACT.whatsappLink }: WhatsAppFabProps) {
   return (
     <a
-      href={whatsappHref()}
+      href={whatsappHref(undefined, whatsappLink)}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Escribinos por WhatsApp"

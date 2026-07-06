@@ -3,11 +3,16 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Wordmark } from "@/components/brand/Wordmark";
-import { NAV_LINKS, whatsappHref } from "@/lib/site";
+import { CONTACT, NAV_LINKS, whatsappHref } from "@/lib/site";
 import { useScrolled } from "@/hooks/useScrolled";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 
-export function SiteHeader() {
+interface SiteHeaderProps {
+  /** Link wa.me (viene del número cargado en el admin). */
+  whatsappLink?: string;
+}
+
+export function SiteHeader({ whatsappLink = CONTACT.whatsappLink }: SiteHeaderProps) {
   const scrolled = useScrolled(24);
   const [open, setOpen] = useState(false);
   useLockBodyScroll(open);
@@ -100,7 +105,7 @@ export function SiteHeader() {
             </Link>
           ))}
           <a
-            href={whatsappHref()}
+            href={whatsappHref(undefined, whatsappLink)}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}

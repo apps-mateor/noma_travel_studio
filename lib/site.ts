@@ -23,12 +23,25 @@ export const CONTACT = {
 /**
  * Devuelve el link de WhatsApp con el mensaje pre-cargado (si hay).
  * Usar en todos los botones/CTA de WhatsApp del sitio.
+ * `link` permite pisar el número con el cargado en el admin (CMS).
  */
-export function whatsappHref(message: string = CONTACT.whatsappMessage): string {
-  const sep = CONTACT.whatsappLink.includes("?") ? "&" : "?";
-  return message
-    ? `${CONTACT.whatsappLink}${sep}text=${encodeURIComponent(message)}`
-    : CONTACT.whatsappLink;
+export function whatsappHref(
+  message: string = CONTACT.whatsappMessage,
+  link: string = CONTACT.whatsappLink,
+): string {
+  const sep = link.includes("?") ? "&" : "?";
+  return message ? `${link}${sep}text=${encodeURIComponent(message)}` : link;
+}
+
+/** Link wa.me a partir del número cargado en el admin; fallback al de código. */
+export function whatsappLinkFromNumber(numero?: string): string {
+  const digits = numero?.replace(/\D/g, "");
+  return digits ? `https://wa.me/${digits}` : CONTACT.whatsappLink;
+}
+
+/** URL de Instagram a partir del usuario cargado en el admin. */
+export function instagramUrl(handle: string): string {
+  return `https://www.instagram.com/${handle.replace(/^@/, "")}/`;
 }
 
 export const SITE = {

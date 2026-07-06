@@ -9,6 +9,59 @@ interface DestinosProps {
   data?: CmsDestinos | null;
 }
 
+interface DestinoItem {
+  name: string;
+  place: string;
+  note: string;
+  link?: string;
+  seed: string;
+  src?: string;
+}
+
+/**
+ * Tarjeta de un destino. Si tiene link (cargado en el admin), toda la
+ * tarjeta es clickeable; los links externos abren en pestaña nueva.
+ */
+function DestinoCard({ destino: d, numero }: { destino: DestinoItem; numero: number }) {
+  const inner = (
+    <>
+      <div className="relative overflow-hidden rounded-2xl">
+        <FilmImage
+          seed={d.seed}
+          src={d.src}
+          alt={`${d.name}, ${d.place}`}
+          sizes="(max-width: 640px) 78vw, (max-width: 1024px) 42vw, 27vw"
+          className="aspect-[3/4] w-full [&>img]:transition-transform [&>img]:duration-700 [&>img]:group-hover:scale-105"
+        />
+        <span className="absolute bottom-3 left-3 rounded-full bg-verde/85 px-3 py-1 font-display text-[0.62rem] uppercase tracking-[0.16em] backdrop-blur-sm">
+          0{numero} / {d.place}
+        </span>
+      </div>
+      <div className="mt-4 flex items-baseline justify-between">
+        <h3 className="display text-xl">{d.name}</h3>
+        <span className="text-naranja transition-transform duration-300 group-hover:translate-x-1">
+          →
+        </span>
+      </div>
+      <p className="mt-1 font-serif text-sm italic text-cream/70">{d.note}</p>
+    </>
+  );
+
+  if (d.link) {
+    const externo = d.link.startsWith("http");
+    return (
+      <a
+        href={d.link}
+        className="group block"
+        {...(externo ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      >
+        {inner}
+      </a>
+    );
+  }
+  return <article className="group">{inner}</article>;
+}
+
 /**
  * Destinos — carrusel horizontal con scroll-snap (sin JS), formato
  * "tira de película" editorial. Cada tarjeta es un destino curado.
@@ -19,10 +72,15 @@ export function Destinos({ data }: DestinosProps) {
         name: d.nombre ?? "",
         place: d.lugar ?? "",
         note: d.nota ?? "",
+        link: d.link || undefined,
         seed: `noma-destino-${i + 1}`,
         src: imgUrl(d.foto, 1000),
       }))
-    : DESTINOS.map((d) => ({ ...d, src: undefined as string | undefined }));
+    : DESTINOS.map((d) => ({
+        ...d,
+        link: undefined as string | undefined,
+        src: undefined as string | undefined,
+      }));
 
   return (
     <Section id="destinos" className="bg-verde text-cream" width="wide">
@@ -48,27 +106,7 @@ export function Destinos({ data }: DestinosProps) {
             delay={(i % 3) * 80}
             className="w-[78vw] shrink-0 snap-start sm:w-[42vw] lg:w-[27vw]"
           >
-            <article className="group">
-              <div className="relative overflow-hidden rounded-2xl">
-                <FilmImage
-                  seed={d.seed}
-                  src={d.src}
-                  alt={`${d.name}, ${d.place}`}
-                  sizes="(max-width: 640px) 78vw, (max-width: 1024px) 42vw, 27vw"
-                  className="aspect-[3/4] w-full [&>img]:transition-transform [&>img]:duration-700 [&>img]:group-hover:scale-105"
-                />
-                <span className="absolute bottom-3 left-3 rounded-full bg-verde/85 px-3 py-1 font-display text-[0.62rem] uppercase tracking-[0.16em] backdrop-blur-sm">
-                  0{i + 1} / {d.place}
-                </span>
-              </div>
-              <div className="mt-4 flex items-baseline justify-between">
-                <h3 className="display text-xl">{d.name}</h3>
-                <span className="text-naranja transition-transform duration-300 group-hover:translate-x-1">
-                  →
-                </span>
-              </div>
-              <p className="mt-1 font-serif text-sm italic text-cream/70">{d.note}</p>
-            </article>
+            <DestinoCard destino={d} numero={i + 1} />
           </Reveal>
         ))}
       </div>

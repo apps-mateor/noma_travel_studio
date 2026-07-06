@@ -65,11 +65,23 @@ export type CmsComoTrabajamos = {
   pasos?: CmsPilar[];
 };
 
-export type CmsDestino = { nombre?: string; lugar?: string; nota?: string; foto?: CmsImagen };
+export type CmsDestino = {
+  nombre?: string;
+  lugar?: string;
+  nota?: string;
+  link?: string;
+  foto?: CmsImagen;
+};
 
 export type CmsDestinos = { titulo?: string; intro?: string; lista?: CmsDestino[] };
 
-export type CmsContacto = { titulo?: string; intro?: string };
+export type CmsContacto = {
+  titulo?: string;
+  intro?: string;
+  whatsapp?: string;
+  email?: string;
+  instagram?: string;
+};
 
 export type SiteContent = {
   hero: CmsHero | null;
@@ -119,9 +131,9 @@ const QUERY = /* groq */ `{
     titulo, intro, pilares[]{titulo, texto}, pasos[]{titulo, texto}
   },
   "destinos": *[_type == "destinos"][0]{
-    titulo, intro, lista[]{nombre, lugar, nota, foto{asset, crop, hotspot}}
+    titulo, intro, lista[]{nombre, lugar, nota, link, foto{asset, crop, hotspot}}
   },
-  "contacto": *[_type == "contacto"][0]{titulo, intro}
+  "contacto": *[_type == "contacto"][0]{titulo, intro, whatsapp, email, instagram}
 }`;
 
 const EMPTY: SiteContent = {
