@@ -6,8 +6,8 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   metadataBase: new URL("https://nomatravelstudio.com"),
   title: {
-    default: "noma · travel studio — viajes curados a medida",
-    template: "%s · noma travel studio",
+    default: "NOMA - Travel Studio",
+    template: "%s · NOMA - Travel Studio",
   },
   description:
     "Viajes curados para exploradores modernos. Diseñamos viajes a medida desde la escucha y el criterio, no desde el catálogo. Lunas de miel, roadtrips y experiencias.",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     "noma",
   ],
   openGraph: {
-    title: "noma · travel studio",
+    title: "NOMA - Travel Studio",
     description: SITE.claimEs,
     type: "website",
     locale: "es_AR",
