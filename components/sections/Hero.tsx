@@ -1,4 +1,5 @@
 import { Fragment, type ReactNode } from "react";
+import { stegaClean } from "next-sanity";
 import { Arrow } from "@/components/brand/Arrow";
 import { Button } from "@/components/ui/Button";
 import { FitLines } from "@/components/ui/FitLines";
@@ -47,7 +48,7 @@ function Linea({ block }: { block: CmsBlock }) {
   return (
     <>
       {block.children?.map((span, j) => {
-        const colorClass = span.marks?.map((m) => COLOR_MARK[m]).find(Boolean);
+        const colorClass = span.marks?.map((m) => COLOR_MARK[stegaClean(m)]).find(Boolean);
         return colorClass ? (
           <span key={j} className={colorClass}>
             {span.text}
@@ -84,7 +85,10 @@ interface HeroProps {
  */
 export function Hero({ data }: HeroProps) {
   const fondoUrl = data?.fondo?.url;
-  const fondoEsVideo = Boolean(data?.fondo?.mimeType?.startsWith("video/"));
+  // stegaClean: en modo borrador Sanity incrusta marcas invisibles en los
+  // strings del CMS; hay que limpiarlas antes de usarlos para lógica
+  // (comparar, indexar objetos), si no el render del server explota.
+  const fondoEsVideo = Boolean(stegaClean(data?.fondo?.mimeType)?.startsWith("video/"));
 
   const poster =
     fondoUrl && !fondoEsVideo
@@ -92,10 +96,10 @@ export function Hero({ data }: HeroProps) {
       : imageSrc("noma-hero", { w: 1920, h: 1080 });
   const videoSrc = fondoEsVideo && fondoUrl ? fondoUrl : HERO_VIDEO;
 
-  const tipografia = TIPOGRAFIA[data?.estilo?.tipografia ?? "display"];
-  const tamano = TAMANO[data?.estilo?.tamano ?? "mediano"];
-  const modoAlineacion = data?.estilo?.alineacion ?? "centro";
-  const alineacion = ALINEACION[modoAlineacion];
+  const tipografia = TIPOGRAFIA[stegaClean(data?.estilo?.tipografia) ?? "display"] ?? TIPOGRAFIA.display;
+  const tamano = TAMANO[stegaClean(data?.estilo?.tamano) ?? "mediano"] ?? TAMANO.mediano;
+  const modoAlineacion = stegaClean(data?.estilo?.alineacion) ?? "centro";
+  const alineacion = ALINEACION[modoAlineacion] ?? ALINEACION.centro;
   const esJustificado = modoAlineacion === "justificado";
 
   return (

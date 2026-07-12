@@ -1,5 +1,6 @@
 // Datos transversales del sitio: navegación e información de contacto.
 // Mantener aquí las constantes evita repetir strings por toda la UI.
+import { stegaClean } from "next-sanity";
 
 // ──────────────────────────────────────────────────────────────────
 //  CONTACTO  ·  editá estos valores con los datos reales del studio
@@ -39,9 +40,13 @@ export function whatsappLinkFromNumber(numero?: string): string {
   return digits ? `https://wa.me/${digits}` : CONTACT.whatsappLink;
 }
 
-/** URL de Instagram a partir del usuario cargado en el admin. */
+/**
+ * URL de Instagram a partir del usuario cargado en el admin.
+ * stegaClean: el handle puede traer marcas invisibles de Sanity en modo
+ * borrador que romperían la URL.
+ */
 export function instagramUrl(handle: string): string {
-  return `https://www.instagram.com/${handle.replace(/^@/, "")}/`;
+  return `https://www.instagram.com/${stegaClean(handle).replace(/^@/, "")}/`;
 }
 
 export const SITE = {

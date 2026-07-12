@@ -3,6 +3,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { FilmImage } from "@/components/ui/FilmImage";
 import { Button } from "@/components/ui/Button";
 import { DESTINOS } from "@/lib/content";
+import { stegaClean } from "next-sanity";
 import { imgUrl, type CmsDestinos } from "@/lib/cms";
 
 interface DestinosProps {
@@ -48,10 +49,13 @@ function DestinoCard({ destino: d, numero }: { destino: DestinoItem; numero: num
   );
 
   if (d.link) {
-    const externo = d.link.startsWith("http");
+    // stegaClean: sin esto, en modo borrador el link lleva caracteres
+    // invisibles de Sanity y el href queda roto.
+    const link = stegaClean(d.link);
+    const externo = link.startsWith("http");
     return (
       <a
-        href={d.link}
+        href={link}
         className="group block"
         {...(externo ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >

@@ -8,6 +8,7 @@ import {
   whatsappHref,
   whatsappLinkFromNumber,
 } from "@/lib/site";
+import { stegaClean } from "next-sanity";
 import type { CmsContacto } from "@/lib/cms";
 
 interface ContactoProps {
@@ -21,7 +22,9 @@ interface ContactoProps {
  */
 export function Contacto({ data }: ContactoProps) {
   const whatsappLink = whatsappLinkFromNumber(data?.whatsapp);
-  const email = data?.email || CONTACT.email;
+  // stegaClean: el email arma el mailto y el endpoint de FormSubmit; las
+  // marcas invisibles del modo borrador de Sanity lo romperían.
+  const email = stegaClean(data?.email) || CONTACT.email;
   const instagramHandle = data?.instagram || CONTACT.instagramHandle;
 
   return (

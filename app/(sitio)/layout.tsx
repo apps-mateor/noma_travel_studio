@@ -2,6 +2,7 @@ import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { stegaClean } from "next-sanity";
 import { SanityLive, getSiteContent } from "@/lib/cms";
 import { whatsappLinkFromNumber } from "@/lib/site";
 import { cmsEnabled } from "@/sanity/env";
@@ -35,7 +36,7 @@ export default async function SitioLayout({
       </main>
       <SiteFooter
         whatsappLink={whatsappLink}
-        email={contacto?.email || undefined}
+        email={stegaClean(contacto?.email) || undefined}
         instagramHandle={contacto?.instagram || undefined}
       />
       <div className="grain" aria-hidden />
