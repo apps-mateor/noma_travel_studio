@@ -136,6 +136,13 @@ const QUERY = /* groq */ `{
   "contacto": *[_type == "contacto"][0]{titulo, intro, whatsapp, email, instagram}
 }`;
 
+/**
+ * Tag de caché compartido por todos los fetches del CMS. El webhook de
+ * Sanity (app/api/revalidate) lo expira al publicar, así el sitio se
+ * regenera aunque nadie lo tenga abierto en ese momento.
+ */
+export const CMS_CACHE_TAG = "cms";
+
 const EMPTY: SiteContent = {
   hero: null,
   concepto: null,
@@ -152,7 +159,7 @@ const EMPTY: SiteContent = {
 export async function getSiteContent(): Promise<SiteContent> {
   if (!cmsEnabled) return EMPTY;
   try {
-    const { data } = await sanityFetch({ query: QUERY });
+    const { data } = await sanityFetch({ query: QUERY, tags: [CMS_CACHE_TAG] });
     return { ...EMPTY, ...(data as SiteContent) };
   } catch (error: unknown) {
     // Si Sanity no responde, el sitio sigue funcionando con el
