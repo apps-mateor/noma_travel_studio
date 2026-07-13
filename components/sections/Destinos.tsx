@@ -1,7 +1,6 @@
 import { Section, Eyebrow } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { FilmImage } from "@/components/ui/FilmImage";
-import { Button } from "@/components/ui/Button";
 import { DESTINOS } from "@/lib/content";
 import { stegaClean } from "next-sanity";
 import { imgUrl, type CmsDestinos } from "@/lib/cms";
@@ -115,13 +114,6 @@ export function Destinos({ data }: DestinosProps) {
         ))}
       </div>
 
-      <Reveal delay={120}>
-        <div className="mt-10">
-          <p className="hand text-naranja" style={{ fontSize: "1.7rem" }}>
-            Curated by noma
-          </p>
-        </div>
-      </Reveal>
     </Section>
   );
 }
