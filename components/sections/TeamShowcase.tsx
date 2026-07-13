@@ -7,8 +7,8 @@ import { Reveal } from "@/components/ui/Reveal";
 // Coreografía en mobile: foto → aparece la bio (velo verde) → tiempo de
 // lectura → vuelve la foto → avanza a la siguiente. Si la persona toca,
 // manda ella.
-const FOTO_MS = 2000;
-const BIO_MS = 8000;
+const FOTO_MS = 1000;
+const BIO_MS = 5000;
 const FADE_MS = 500;
 const RESUME_MS = 7000;
 
