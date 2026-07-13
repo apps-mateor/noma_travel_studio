@@ -59,31 +59,31 @@ export function ContactForm({ email }: ContactFormProps) {
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="flex flex-col gap-2">
-          <span className="eyebrow text-brown/60">Nombre</span>
+          <span className="eyebrow text-brown">Nombre</span>
           <input className={FIELD} type="text" name="nombre" placeholder="Cómo te llamás" required />
         </label>
         <label className="flex flex-col gap-2">
-          <span className="eyebrow text-brown/60">Email</span>
+          <span className="eyebrow text-brown">Email</span>
           <input className={FIELD} type="email" name="email" placeholder="tu@email.com" required />
         </label>
         <label className="flex flex-col gap-2">
-          <span className="eyebrow whitespace-nowrap text-brown/60">Tipo de viaje</span>
+          <span className="eyebrow whitespace-nowrap text-brown">Tipo de viaje</span>
           <input className={FIELD} type="text" name="tipo" placeholder="Luna de miel, roadtrip…" />
         </label>
         <label className="flex flex-col gap-2">
-          <span className="eyebrow whitespace-nowrap text-brown/60">¿Cuándo?</span>
+          <span className="eyebrow whitespace-nowrap text-brown">¿Cuándo?</span>
           <input className={FIELD} type="text" name="fecha" placeholder="Aprox. mes / año" />
         </label>
         <label className="flex flex-col gap-2">
-          <span className="eyebrow whitespace-nowrap text-brown/60">¿Cuántos viajan?</span>
+          <span className="eyebrow whitespace-nowrap text-brown">¿Cuántos viajan?</span>
           <input className={FIELD} type="text" name="personas" placeholder="Ej: 2 adultos, 2 peques" />
         </label>
         <label className="flex flex-col gap-2">
-          <span className="eyebrow whitespace-nowrap text-brown/60">Teléfono (opcional)</span>
+          <span className="eyebrow whitespace-nowrap text-brown">Teléfono (opcional)</span>
           <input className={FIELD} type="tel" name="telefono" placeholder="+54 9 11 …" />
         </label>
         <label className="flex flex-col gap-2 sm:col-span-2">
-          <span className="eyebrow text-brown/60">Contanos un poco más</span>
+          <span className="eyebrow text-brown">Contanos un poco más</span>
           <textarea
             className={`${FIELD} min-h-28 resize-y`}
             name="mensaje"
