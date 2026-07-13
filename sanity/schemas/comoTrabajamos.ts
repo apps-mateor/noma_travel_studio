@@ -6,6 +6,13 @@ export const comoTrabajamos = defineType({
   type: "document",
   fields: [
     defineField({
+      name: "etiqueta",
+      title: "Etiqueta chica sobre el título (opcional)",
+      description: "El texto pequeño arriba del título (ej: La promesa). Vacío = no se muestra.",
+      type: "string",
+      initialValue: "La promesa",
+    }),
+    defineField({
       name: "titulo",
       title: "Título",
       type: "string",

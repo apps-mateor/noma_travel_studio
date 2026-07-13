@@ -18,6 +18,14 @@ export const concepto = defineType({
       initialValue: "El mejor es el que se",
     }),
     defineField({
+      name: "palabraTachada",
+      title: "Palabra tachada (opcional)",
+      description:
+        "Aparece tachada justo antes de la palabra destacada (el gesto ~~piensa~~ cura del brandbook). Dejar vacío para no mostrarla.",
+      type: "string",
+      initialValue: "piensa",
+    }),
+    defineField({
       name: "palabraDestacada",
       title: "Palabra destacada (cursiva naranja)",
       type: "string",

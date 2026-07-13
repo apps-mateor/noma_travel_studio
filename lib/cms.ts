@@ -34,6 +34,7 @@ export type CmsRecuadro = { titulo?: string; texto?: string };
 export type CmsConcepto = {
   fraseInicio?: string;
   fraseMedio?: string;
+  palabraTachada?: string;
   palabraDestacada?: string;
   fraseFin?: string;
   proposito?: string;
@@ -59,6 +60,7 @@ export type CmsQuienesSomos = {
 export type CmsPilar = { titulo?: string; texto?: string };
 
 export type CmsComoTrabajamos = {
+  etiqueta?: string;
   titulo?: string;
   intro?: string;
   pilares?: CmsPilar[];
@@ -119,7 +121,7 @@ const QUERY = /* groq */ `{
     "fondo": fondo.asset->{url, mimeType}
   },
   "concepto": *[_type == "concepto"][0]{
-    fraseInicio, fraseMedio, palabraDestacada, fraseFin, proposito,
+    fraseInicio, fraseMedio, palabraTachada, palabraDestacada, fraseFin, proposito,
     recuadros[]{titulo, texto}
   },
   "quienesSomos": *[_type == "quienesSomos"][0]{
@@ -128,7 +130,7 @@ const QUERY = /* groq */ `{
     equipo[]{nombre, rol, bio, foto{asset, crop, hotspot}}
   },
   "comoTrabajamos": *[_type == "comoTrabajamos"][0]{
-    titulo, intro, pilares[]{titulo, texto}, pasos[]{titulo, texto}
+    etiqueta, titulo, intro, pilares[]{titulo, texto}, pasos[]{titulo, texto}
   },
   "destinos": *[_type == "destinos"][0]{
     titulo, intro, lista[]{nombre, lugar, nota, link, foto{asset, crop, hotspot}}

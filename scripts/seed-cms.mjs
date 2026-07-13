@@ -53,6 +53,7 @@ const docs = [
     _type: "concepto",
     fraseInicio: "Hay tantos viajes como viajeros en el mundo.",
     fraseMedio: "El mejor es el que se",
+    palabraTachada: "piensa",
     palabraDestacada: "cura",
     fraseFin: "para vos.",
     proposito:
@@ -97,6 +98,7 @@ const docs = [
   {
     _id: "comoTrabajamos",
     _type: "comoTrabajamos",
+    etiqueta: "La promesa",
     titulo: "Cómo trabajamos",
     intro:
       "Cuatro fundamentos que sostienen cada viaje. No es una promesa de marketing: es la forma en que trabajamos, de principio a fin.",

@@ -16,6 +16,10 @@ export function Concepto({ data }: ConceptoProps) {
     ? data.recuadros.map((r) => ({ title: r.titulo ?? "", body: r.texto ?? "" }))
     : PROPUESTA_VALOR;
 
+  // Si la sección viene del CMS, manda lo cargado (vacío = no mostrarla);
+  // sin CMS, el default de marca.
+  const tachada = data ? data.palabraTachada : CONCEPTO.strike;
+
   return (
     <Section id="concepto" className="bg-cream" width="default">
       <Reveal>
@@ -23,6 +27,16 @@ export function Concepto({ data }: ConceptoProps) {
           {data?.fraseInicio ?? CONCEPTO.pre}{" "}
           <span className="block sm:inline">
             {data?.fraseMedio ?? CONCEPTO.linePlain}{" "}
+            {/* Palabra tachada (gesto ~~piensa~~ cura del brandbook) */}
+            {tachada && (
+              <>
+                <span className="italic text-brown-soft">
+                  <span className="line-through decoration-naranja decoration-2">
+                    {tachada}
+                  </span>
+                </span>{" "}
+              </>
+            )}
             {/* Palabra de marca resaltada: cursiva + tracking amplio */}
             <span
               className="hand text-naranja"

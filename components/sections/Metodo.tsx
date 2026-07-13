@@ -12,6 +12,8 @@ interface MetodoProps {
  * + el proceso "cómo lo hacemos" en 4 pasos, sin título propio.
  */
 export function Metodo({ data }: MetodoProps) {
+  // Con CMS manda lo cargado (vacío = ocultarla); sin CMS, el default.
+  const etiqueta = data ? data.etiqueta : "La promesa";
   const pilares = data?.pilares?.length
     ? data.pilares.map((p) => ({ title: p.titulo ?? "", body: p.texto ?? "" }))
     : PILARES;
@@ -23,8 +25,8 @@ export function Metodo({ data }: MetodoProps) {
     <Section id="metodo" className="bg-brown text-cream" width="wide">
       <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
         <Reveal className="lg:col-span-7">
-          <Eyebrow className="text-cream/50">La promesa</Eyebrow>
-          <h2 className="display mt-5 text-[clamp(2rem,5vw,4rem)]">
+          {etiqueta && <Eyebrow className="text-cream/50">{etiqueta}</Eyebrow>}
+          <h2 className={`display text-[clamp(2rem,5vw,4rem)] ${etiqueta ? "mt-5" : ""}`}>
             {data?.titulo ?? "Cómo trabajamos"}
           </h2>
         </Reveal>
@@ -40,12 +42,7 @@ export function Metodo({ data }: MetodoProps) {
         {pilares.map((pilar, i) => (
           <Reveal key={pilar.title} delay={i * 80}>
             <article className="group flex h-full flex-col gap-4 bg-brown p-8 transition-colors duration-500 hover:bg-brown-soft sm:p-10">
-              <div className="flex items-baseline justify-between">
-                <h3 className="display text-xl sm:text-2xl">{pilar.title}</h3>
-                <span className="font-serif text-sm italic text-cream/40">
-                  noma
-                </span>
-              </div>
+              <h3 className="display text-xl sm:text-2xl">{pilar.title}</h3>
               <p className="font-serif leading-relaxed text-cream/80">{pilar.body}</p>
             </article>
           </Reveal>
