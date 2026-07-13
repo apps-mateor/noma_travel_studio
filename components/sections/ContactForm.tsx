@@ -40,6 +40,7 @@ export function ContactForm({ email }: ContactFormProps) {
           "Tipo de viaje": campo("tipo"),
           Cuándo: campo("fecha"),
           "Cuántos viajan": campo("personas"),
+          Teléfono: campo("telefono"),
           Mensaje: campo("mensaje"),
         }),
       });
@@ -65,20 +66,22 @@ export function ContactForm({ email }: ContactFormProps) {
           <span className="eyebrow text-brown/60">Email</span>
           <input className={FIELD} type="email" name="email" placeholder="tu@email.com" required />
         </label>
-        <div className="grid gap-4 sm:col-span-2 sm:grid-cols-3">
-          <label className="flex flex-col gap-2">
-            <span className="eyebrow text-brown/60">Tipo de viaje</span>
-            <input className={FIELD} type="text" name="tipo" placeholder="Luna de miel, roadtrip…" />
-          </label>
-          <label className="flex flex-col gap-2">
-            <span className="eyebrow text-brown/60">¿Cuándo?</span>
-            <input className={FIELD} type="text" name="fecha" placeholder="Aprox. mes / año" />
-          </label>
-          <label className="flex flex-col gap-2">
-            <span className="eyebrow text-brown/60">¿Cuántos viajan?</span>
-            <input className={FIELD} type="text" name="personas" placeholder="Ej: 2 adultos, 2 peques" />
-          </label>
-        </div>
+        <label className="flex flex-col gap-2">
+          <span className="eyebrow whitespace-nowrap text-brown/60">Tipo de viaje</span>
+          <input className={FIELD} type="text" name="tipo" placeholder="Luna de miel, roadtrip…" />
+        </label>
+        <label className="flex flex-col gap-2">
+          <span className="eyebrow whitespace-nowrap text-brown/60">¿Cuándo?</span>
+          <input className={FIELD} type="text" name="fecha" placeholder="Aprox. mes / año" />
+        </label>
+        <label className="flex flex-col gap-2">
+          <span className="eyebrow whitespace-nowrap text-brown/60">¿Cuántos viajan?</span>
+          <input className={FIELD} type="text" name="personas" placeholder="Ej: 2 adultos, 2 peques" />
+        </label>
+        <label className="flex flex-col gap-2">
+          <span className="eyebrow whitespace-nowrap text-brown/60">Teléfono (opcional)</span>
+          <input className={FIELD} type="tel" name="telefono" placeholder="+54 9 11 …" />
+        </label>
         <label className="flex flex-col gap-2 sm:col-span-2">
           <span className="eyebrow text-brown/60">Contanos un poco más</span>
           <textarea
@@ -98,17 +101,14 @@ export function ContactForm({ email }: ContactFormProps) {
         <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
       </button>
 
-      {estado === "ok" ? (
+      {estado === "ok" && (
         <p className="mt-4 font-serif text-sm italic text-verde">
           ¡Listo! Nos llegó tu consulta. Te respondemos a la brevedad.
         </p>
-      ) : estado === "error" ? (
+      )}
+      {estado === "error" && (
         <p className="mt-4 font-serif text-sm italic text-naranja">
           Ups, no pudimos enviar el mensaje. Probá de nuevo o escribinos por WhatsApp.
-        </p>
-      ) : (
-        <p className="mt-4 font-serif text-sm italic text-brown/55">
-          Te respondemos a la brevedad. Sin urgencias, con criterio.
         </p>
       )}
     </form>
