@@ -1,10 +1,9 @@
 import { Fragment } from "react";
 import { Section, Eyebrow } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
-import { AutoCarousel } from "@/components/ui/AutoCarousel";
 import { FilmImage } from "@/components/ui/FilmImage";
 import { FitLines } from "@/components/ui/FitLines";
-import { TeamCard } from "@/components/sections/TeamCard";
+import { TeamShowcase } from "@/components/sections/TeamShowcase";
 import { STUDIO, POSICIONAMIENTO, EQUIPO } from "@/lib/content";
 import { imgUrl, type CmsQuienesSomos } from "@/lib/cms";
 
@@ -92,25 +91,9 @@ export function Studio({ data }: StudioProps) {
         </div>
       </div>
 
-      {/* Equipo — en mobile: carrusel que avanza solo y se swipea a mano;
-          la bio se despliega sobre la foto (tap en touch, hover en desktop). */}
-      <AutoCarousel className="no-scrollbar mt-16 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:pb-0">
-        {equipo.map((persona, i) => (
-          <Reveal
-            key={persona.seed}
-            delay={i * 90}
-            className="w-[76vw] shrink-0 snap-center sm:w-auto"
-          >
-            <TeamCard
-              name={persona.name}
-              role={persona.role}
-              bio={persona.bio}
-              seed={persona.seed}
-              src={persona.src}
-            />
-          </Reveal>
-        ))}
-      </AutoCarousel>
+      {/* Equipo — tarjetas con flip 3D: en mobile giran y avanzan solas
+          (el tap manda), en desktop giran al hover. */}
+      <TeamShowcase equipo={equipo} />
     </Section>
   );
 }
