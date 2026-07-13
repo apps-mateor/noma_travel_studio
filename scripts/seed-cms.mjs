@@ -156,6 +156,15 @@ const docs = [
     titulo: "Contacto",
     intro:
       "Escuchamos antes de proponer. Contanos el contexto, el momento y el estilo de viaje —el resto lo curamos nosotras.",
+    formulario: {
+      nombre: "Cómo te llamás",
+      email: "tu@email.com",
+      tipo: "Luna de miel, roadtrip…",
+      cuando: "Aprox. mes / año",
+      cuantos: "Ej: 2 adultos, 2 peques",
+      telefono: "+54 9 11 …",
+      mensaje: "Qué te imaginás, qué te mueve, los 'sí o sí'…",
+    },
   },
 ];
 

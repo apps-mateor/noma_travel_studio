@@ -7,9 +7,24 @@ const FIELD =
 
 type Estado = "idle" | "enviando" | "ok" | "error";
 
+// Textos de ejemplo (ghost text) por defecto; se pisan desde el admin.
+const PLACEHOLDERS = {
+  nombre: "Cómo te llamás",
+  email: "tu@email.com",
+  tipo: "Luna de miel, roadtrip…",
+  cuando: "Aprox. mes / año",
+  cuantos: "Ej: 2 adultos, 2 peques",
+  telefono: "+54 9 11 …",
+  mensaje: "Qué te imaginás, qué te mueve, los 'sí o sí'…",
+} as const;
+
+type Placeholders = Partial<Record<keyof typeof PLACEHOLDERS, string>>;
+
 interface ContactFormProps {
   /** Casilla que recibe las consultas (se edita en el admin → Contacto). */
   email: string;
+  /** Ghost text de cada campo (se edita en el admin → Contacto). */
+  placeholders?: Placeholders | null;
 }
 
 /**
@@ -17,8 +32,10 @@ interface ContactFormProps {
  * ⚠️ Primera vez: FormSubmit manda un mail de activación a la casilla
  * destino; hay que clickear "Activate" una única vez para empezar a recibir.
  */
-export function ContactForm({ email }: ContactFormProps) {
+export function ContactForm({ email, placeholders }: ContactFormProps) {
   const [estado, setEstado] = useState<Estado>("idle");
+  const ph = (campo: keyof typeof PLACEHOLDERS) =>
+    placeholders?.[campo] || PLACEHOLDERS[campo];
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -60,34 +77,34 @@ export function ContactForm({ email }: ContactFormProps) {
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="flex flex-col gap-2">
           <span className="eyebrow text-brown">Nombre</span>
-          <input className={FIELD} type="text" name="nombre" placeholder="Cómo te llamás" required />
+          <input className={FIELD} type="text" name="nombre" placeholder={ph("nombre")} required />
         </label>
         <label className="flex flex-col gap-2">
           <span className="eyebrow text-brown">Email</span>
-          <input className={FIELD} type="email" name="email" placeholder="tu@email.com" required />
+          <input className={FIELD} type="email" name="email" placeholder={ph("email")} required />
         </label>
         <label className="flex flex-col gap-2">
           <span className="eyebrow whitespace-nowrap text-brown">Tipo de viaje</span>
-          <input className={FIELD} type="text" name="tipo" placeholder="Luna de miel, roadtrip…" />
+          <input className={FIELD} type="text" name="tipo" placeholder={ph("tipo")} />
         </label>
         <label className="flex flex-col gap-2">
           <span className="eyebrow whitespace-nowrap text-brown">¿Cuándo?</span>
-          <input className={FIELD} type="text" name="fecha" placeholder="Aprox. mes / año" />
+          <input className={FIELD} type="text" name="fecha" placeholder={ph("cuando")} />
         </label>
         <label className="flex flex-col gap-2">
           <span className="eyebrow whitespace-nowrap text-brown">¿Cuántos viajan?</span>
-          <input className={FIELD} type="text" name="personas" placeholder="Ej: 2 adultos, 2 peques" />
+          <input className={FIELD} type="text" name="personas" placeholder={ph("cuantos")} />
         </label>
         <label className="flex flex-col gap-2">
           <span className="eyebrow whitespace-nowrap text-brown">Teléfono (opcional)</span>
-          <input className={FIELD} type="tel" name="telefono" placeholder="+54 9 11 …" />
+          <input className={FIELD} type="tel" name="telefono" placeholder={ph("telefono")} />
         </label>
         <label className="flex flex-col gap-2 sm:col-span-2">
           <span className="eyebrow text-brown">Contanos un poco más</span>
           <textarea
             className={`${FIELD} min-h-28 resize-y`}
             name="mensaje"
-            placeholder="Qué te imaginás, qué te mueve, los 'sí o sí'…"
+            placeholder={ph("mensaje")}
           />
         </label>
       </div>

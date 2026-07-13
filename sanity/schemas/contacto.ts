@@ -41,6 +41,27 @@ export const contacto = defineType({
       description: "Con o sin @. Ej: noma__travelstudio",
       type: "string",
     }),
+    defineField({
+      name: "formulario",
+      title: "Formulario — textos de ejemplo (ghost text)",
+      description: "Lo que se ve en gris dentro de cada campo antes de escribir.",
+      type: "object",
+      options: { columns: 2 },
+      fields: [
+        defineField({ name: "nombre", title: "Nombre", type: "string", initialValue: "Cómo te llamás" }),
+        defineField({ name: "email", title: "Email", type: "string", initialValue: "tu@email.com" }),
+        defineField({ name: "tipo", title: "Tipo de viaje", type: "string", initialValue: "Luna de miel, roadtrip…" }),
+        defineField({ name: "cuando", title: "¿Cuándo?", type: "string", initialValue: "Aprox. mes / año" }),
+        defineField({ name: "cuantos", title: "¿Cuántos viajan?", type: "string", initialValue: "Ej: 2 adultos, 2 peques" }),
+        defineField({ name: "telefono", title: "Teléfono", type: "string", initialValue: "+54 9 11 …" }),
+        defineField({
+          name: "mensaje",
+          title: "Contanos un poco más",
+          type: "string",
+          initialValue: "Qué te imaginás, qué te mueve, los 'sí o sí'…",
+        }),
+      ],
+    }),
   ],
   preview: { prepare: () => ({ title: "Contacto" }) },
 });

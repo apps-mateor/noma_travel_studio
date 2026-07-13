@@ -77,12 +77,23 @@ export type CmsDestino = {
 
 export type CmsDestinos = { titulo?: string; intro?: string; lista?: CmsDestino[] };
 
+export type CmsFormulario = {
+  nombre?: string;
+  email?: string;
+  tipo?: string;
+  cuando?: string;
+  cuantos?: string;
+  telefono?: string;
+  mensaje?: string;
+};
+
 export type CmsContacto = {
   titulo?: string;
   intro?: string;
   whatsapp?: string;
   email?: string;
   instagram?: string;
+  formulario?: CmsFormulario;
 };
 
 export type SiteContent = {
@@ -135,7 +146,7 @@ const QUERY = /* groq */ `{
   "destinos": *[_type == "destinos"][0]{
     titulo, intro, lista[]{nombre, lugar, nota, link, foto{asset, crop, hotspot}}
   },
-  "contacto": *[_type == "contacto"][0]{titulo, intro, whatsapp, email, instagram}
+  "contacto": *[_type == "contacto"][0]{titulo, intro, whatsapp, email, instagram, formulario}
 }`;
 
 /**
