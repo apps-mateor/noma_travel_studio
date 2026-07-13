@@ -101,7 +101,12 @@ export function Studio({ data }: StudioProps) {
             delay={i * 90}
             className="w-[76vw] shrink-0 snap-center sm:w-auto"
           >
-            <article className="group relative overflow-hidden rounded-2xl" tabIndex={0}>
+            {/* En mobile el tap no debe activar estados de foco (anillo
+                naranja / ocultar nombre): son sólo para teclado en desktop */}
+            <article
+              className="group relative overflow-hidden rounded-2xl focus-visible:outline-none sm:focus-visible:outline-2 sm:focus-visible:outline-offset-[3px] sm:focus-visible:outline-naranja"
+              tabIndex={0}
+            >
               <FilmImage
                 seed={persona.seed}
                 src={persona.src}
@@ -109,8 +114,8 @@ export function Studio({ data }: StudioProps) {
                 sizes="(max-width: 640px) 100vw, 33vw"
                 className="aspect-[3/4] w-full [&>img]:group-hover:scale-105"
               />
-              {/* Nombre siempre visible */}
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-verde/90 to-transparent p-5 pt-14 text-cream transition-opacity duration-500 group-hover:opacity-0 group-focus-within:opacity-0">
+              {/* Nombre siempre visible (en desktop se esconde al mostrar la bio) */}
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-verde/90 to-transparent p-5 pt-14 text-cream transition-opacity duration-500 sm:group-hover:opacity-0 sm:group-focus-within:opacity-0">
                 <h3 className="display text-lg">{persona.name}</h3>
               </div>
               {/* Overlay con bio al hover / foco (sólo desktop) */}
