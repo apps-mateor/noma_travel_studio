@@ -4,11 +4,12 @@ import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { FilmImage } from "@/components/ui/FilmImage";
 import { Reveal } from "@/components/ui/Reveal";
 
-// Coreografía en mobile: foto → gira a la bio → tiempo de lectura →
-// vuelve la foto → avanza a la siguiente. Si la persona toca, manda ella.
+// Coreografía en mobile: foto → aparece la bio (velo verde) → tiempo de
+// lectura → vuelve la foto → avanza a la siguiente. Si la persona toca,
+// manda ella.
 const FOTO_MS = 2000;
 const BIO_MS = 8000;
-const FLIP_MS = 700;
+const FADE_MS = 500;
 const RESUME_MS = 7000;
 
 export interface Integrante {
@@ -24,10 +25,10 @@ interface TeamShowcaseProps {
 }
 
 /**
- * Tarjetas del equipo con flip 3D (foto al frente, bio al dorso).
- * Mobile: carrusel que gira y avanza solo; tap = flip manual + pausa.
- * Desktop: grilla de 3, flip al hover. Reduced-motion: sin autoplay
- * y flip instantáneo.
+ * Tarjetas del equipo: la bio aparece como velo verde translúcido
+ * sobre la foto. Mobile: carrusel que muestra cada bio solo y avanza;
+ * tap = toggle manual + pausa. Desktop: grilla de 3, bio al hover.
+ * Reduced-motion: sin autoplay y fade instantáneo.
  */
 export function TeamShowcase({ equipo }: TeamShowcaseProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -86,7 +87,7 @@ export function TeamShowcase({ equipo }: TeamShowcaseProps) {
         if (cancelled) break;
         // cerrar sólo si nadie giró otra tarjeta mientras tanto
         setFlipped((actual) => (actual === i ? null : actual));
-        await wait(FLIP_MS + 200);
+        await wait(FADE_MS + 200);
         i = (i + 1) % equipo.length;
       }
     })();
@@ -157,37 +158,38 @@ function FlipCard({ persona, flipped, onTap, onEnter, onLeave }: FlipCardProps) 
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       onKeyDown={onKeyDown}
-      className="cursor-pointer [perspective:1200px] focus-visible:outline-none sm:focus-visible:outline-2 sm:focus-visible:outline-offset-[3px] sm:focus-visible:outline-naranja"
+      className="group relative cursor-pointer overflow-hidden rounded-2xl focus-visible:outline-none sm:focus-visible:outline-2 sm:focus-visible:outline-offset-[3px] sm:focus-visible:outline-naranja"
     >
+      <FilmImage
+        seed={persona.seed}
+        src={persona.src}
+        alt={`${persona.name} — ${persona.role}`}
+        sizes="(max-width: 640px) 100vw, 33vw"
+        className="aspect-[3/4] w-full"
+      />
+
+      {/* Nombre siempre visible (se esconde cuando la bio está abierta) */}
       <div
-        className={`relative transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] motion-reduce:duration-0 ${
-          flipped ? "[transform:rotateY(180deg)]" : ""
+        className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-verde/90 to-transparent p-5 pt-14 text-cream transition-opacity duration-500 motion-reduce:duration-0 ${
+          flipped ? "opacity-0" : "opacity-100"
         }`}
       >
-        {/* Frente: foto + nombre */}
-        <div className="relative overflow-hidden rounded-2xl [-webkit-backface-visibility:hidden] [backface-visibility:hidden]">
-          <FilmImage
-            seed={persona.seed}
-            src={persona.src}
-            alt={`${persona.name} — ${persona.role}`}
-            sizes="(max-width: 640px) 100vw, 33vw"
-            className="aspect-[3/4] w-full"
-          />
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-verde/90 to-transparent p-5 pt-14 text-cream">
-            <h3 className="display text-lg">{persona.name}</h3>
-          </div>
-        </div>
+        <h3 className="display text-lg">{persona.name}</h3>
+      </div>
 
-        {/* Dorso: rol + bio */}
-        <div className="absolute inset-0 flex flex-col justify-end overflow-y-auto rounded-2xl bg-verde p-6 text-cream [-webkit-backface-visibility:hidden] [backface-visibility:hidden] [transform:rotateY(180deg)]">
-          <p className="hand text-naranja" style={{ fontSize: "1.3rem" }}>
-            {persona.role}
-          </p>
-          <h3 className="display mt-2 text-lg">{persona.name}</h3>
-          <p className="mt-3 font-serif text-sm leading-relaxed text-cream/85">
-            {persona.bio}
-          </p>
-        </div>
+      {/* Bio: velo verde translúcido sobre la foto */}
+      <div
+        className={`absolute inset-0 flex flex-col justify-end overflow-y-auto bg-verde/85 p-6 text-cream transition-opacity duration-500 motion-reduce:duration-0 ${
+          flipped ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <p className="hand text-naranja" style={{ fontSize: "1.3rem" }}>
+          {persona.role}
+        </p>
+        <h3 className="display mt-2 text-lg">{persona.name}</h3>
+        <p className="mt-3 font-serif text-sm leading-relaxed text-cream/85">
+          {persona.bio}
+        </p>
       </div>
     </div>
   );
