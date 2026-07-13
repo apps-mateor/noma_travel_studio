@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { Section, Eyebrow } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
+import { AutoCarousel } from "@/components/ui/AutoCarousel";
 import { FilmImage } from "@/components/ui/FilmImage";
 import { FitLines } from "@/components/ui/FitLines";
 import { STUDIO, POSICIONAMIENTO, EQUIPO } from "@/lib/content";
@@ -90,9 +91,10 @@ export function Studio({ data }: StudioProps) {
         </div>
       </div>
 
-      {/* Equipo — hover (o foco/tap) revela rol y background de cada una.
-          En mobile es un carrusel swipeable; desde sm, grilla de 3. */}
-      <div className="no-scrollbar mt-16 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:pb-0">
+      {/* Equipo — en mobile: carrusel que avanza solo y se swipea a mano,
+          con rol y bio visibles bajo cada foto. Desde sm: grilla de 3 con
+          la bio al hover. */}
+      <AutoCarousel className="no-scrollbar mt-16 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:pb-0">
         {equipo.map((persona, i) => (
           <Reveal
             key={persona.seed}
@@ -111,8 +113,8 @@ export function Studio({ data }: StudioProps) {
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-verde/90 to-transparent p-5 pt-14 text-cream transition-opacity duration-500 group-hover:opacity-0 group-focus-within:opacity-0">
                 <h3 className="display text-lg">{persona.name}</h3>
               </div>
-              {/* Overlay con bio al hover / foco */}
-              <div className="absolute inset-0 flex flex-col justify-end bg-verde/90 p-6 text-cream opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100 group-focus:opacity-100">
+              {/* Overlay con bio al hover / foco (sólo desktop) */}
+              <div className="absolute inset-0 hidden flex-col justify-end bg-verde/90 p-6 text-cream opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-within:opacity-100 sm:flex">
                 <p className="hand text-naranja" style={{ fontSize: "1.3rem" }}>
                   {persona.role}
                 </p>
@@ -122,9 +124,19 @@ export function Studio({ data }: StudioProps) {
                 </p>
               </div>
             </article>
+
+            {/* En mobile no hay hover: rol y bio visibles bajo la foto */}
+            <div className="mt-3 px-1 sm:hidden">
+              <p className="hand text-naranja" style={{ fontSize: "1.2rem" }}>
+                {persona.role}
+              </p>
+              <p className="mt-1 font-serif text-sm leading-relaxed text-brown/80">
+                {persona.bio}
+              </p>
+            </div>
           </Reveal>
         ))}
-      </div>
+      </AutoCarousel>
     </Section>
   );
 }

@@ -42,7 +42,10 @@ export function SiteFooter({
             <a href={whatsappHref(undefined, whatsappLink)} target="_blank" rel="noopener noreferrer" className="w-fit text-brown/90 transition-colors hover:text-naranja">
               WhatsApp
             </a>
-            <a href={`mailto:${email}`} className="w-fit text-brown/90 transition-colors hover:text-naranja">
+            <a
+              href={`mailto:${email}`}
+              className="w-fit max-w-full text-brown/90 transition-colors [overflow-wrap:anywhere] hover:text-naranja"
+            >
               {email}
             </a>
           </div>
