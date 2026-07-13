@@ -47,8 +47,9 @@ export function Studio({ data }: StudioProps) {
           </div>
         </Reveal>
 
-        {/* Texto */}
-        <div className="lg:col-span-7 lg:pl-8">
+        {/* Texto — min-w-0: sin esto, el FitLines de abajo (líneas a ancho
+            natural) estira la columna de la grilla y desborda en mobile */}
+        <div className="min-w-0 lg:col-span-7 lg:pl-8">
           <Reveal>
             <Eyebrow className="text-brown/60">{STUDIO.kicker}</Eyebrow>
             <h2 className="display mt-5 text-[clamp(2rem,4.5vw,3.6rem)]">
@@ -89,10 +90,15 @@ export function Studio({ data }: StudioProps) {
         </div>
       </div>
 
-      {/* Equipo — hover (o foco) revela rol y background de cada una */}
-      <div className="mt-16 grid gap-6 sm:grid-cols-3">
+      {/* Equipo — hover (o foco/tap) revela rol y background de cada una.
+          En mobile es un carrusel swipeable; desde sm, grilla de 3. */}
+      <div className="no-scrollbar mt-16 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:pb-0">
         {equipo.map((persona, i) => (
-          <Reveal key={persona.seed} delay={i * 90}>
+          <Reveal
+            key={persona.seed}
+            delay={i * 90}
+            className="w-[76vw] shrink-0 snap-center sm:w-auto"
+          >
             <article className="group relative overflow-hidden rounded-2xl" tabIndex={0}>
               <FilmImage
                 seed={persona.seed}
