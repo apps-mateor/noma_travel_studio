@@ -139,10 +139,10 @@ const componentes: PortableTextComponents = {
 
             return (
               <div key={grupo[0]?.asset?._ref ?? g} className="flex flex-col gap-4 sm:gap-5">
-                {/* Dos columnas jugadas: alturas distintas y una baja un poco */}
-                <div className="grid grid-cols-2 items-start gap-4 sm:gap-5">
+                {/* Dos columnas jugadas: arriba desfasadas, abajo alineadas */}
+                <div className="grid grid-cols-2 items-end gap-4 sm:gap-5">
                   {foto(a, "aspect-[4/5]", 0)}
-                  {foto(b, "aspect-[3/4] sm:mt-10", 1)}
+                  {foto(b, "aspect-square", 1)}
                 </div>
                 {c && foto(c, "aspect-[16/9]", 2)}
               </div>
