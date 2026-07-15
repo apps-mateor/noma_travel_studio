@@ -25,6 +25,11 @@ interface ContactFormProps {
   email: string;
   /** Ghost text de cada campo (se edita en el admin → Contacto). */
   placeholders?: Placeholders | null;
+  /**
+   * Asunto del email. Las guías pasan su nombre acá para saber de qué
+   * viaje llega cada consulta. Default: consulta general de la web.
+   */
+  asunto?: string;
 }
 
 /**
@@ -32,7 +37,7 @@ interface ContactFormProps {
  * ⚠️ Primera vez: FormSubmit manda un mail de activación a la casilla
  * destino; hay que clickear "Activate" una única vez para empezar a recibir.
  */
-export function ContactForm({ email, placeholders }: ContactFormProps) {
+export function ContactForm({ email, placeholders, asunto }: ContactFormProps) {
   const [estado, setEstado] = useState<Estado>("idle");
   const ph = (campo: keyof typeof PLACEHOLDERS) =>
     placeholders?.[campo] || PLACEHOLDERS[campo];
@@ -49,7 +54,7 @@ export function ContactForm({ email, placeholders }: ContactFormProps) {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
-          _subject: `Nueva consulta desde la web — ${campo("nombre") || "sin nombre"}`,
+          _subject: `${asunto ?? "Nueva consulta desde la web"} — ${campo("nombre") || "sin nombre"}`,
           _template: "table",
           _captcha: "false",
           Nombre: campo("nombre"),

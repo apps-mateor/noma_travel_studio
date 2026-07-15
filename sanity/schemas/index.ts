@@ -4,8 +4,9 @@ import { quienesSomos } from "./quienesSomos";
 import { comoTrabajamos } from "./comoTrabajamos";
 import { destinos } from "./destinos";
 import { contacto } from "./contacto";
+import { guia } from "./guia";
 
-export const schemaTypes = [hero, concepto, quienesSomos, comoTrabajamos, destinos, contacto];
+export const schemaTypes = [hero, concepto, quienesSomos, comoTrabajamos, destinos, contacto, guia];
 
 /** Tipos que funcionan como documento único (una sola "zona" por sección). */
 export const SINGLETONS = [

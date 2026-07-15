@@ -29,26 +29,31 @@ export default defineConfig({
       },
     }),
     structureTool({
-      title: "Secciones",
+      title: "Contenido",
       structure: (S) =>
         S.list()
-          .title("Secciones del sitio")
-          .items(
-            SINGLETONS.map((s) =>
+          .title("Contenido del sitio")
+          .items([
+            ...SINGLETONS.map((s) =>
               S.listItem()
                 .title(s.title)
                 .id(s.type)
                 .child(S.document().schemaType(s.type).documentId(s.type)),
             ),
-          ),
+            S.divider(),
+            // Las guías sí se crean/borran libremente (una por viaje).
+            S.documentTypeListItem("guia").title("Guías de viaje"),
+          ]),
     }),
     esESLocale(),
   ],
   schema: { types: schemaTypes },
   document: {
-    // Sin "crear nuevo": las secciones son fijas.
+    // Desde "crear nuevo" global sólo se crean guías; las secciones son fijas.
     newDocumentOptions: (prev, { creationContext }) =>
-      creationContext.type === "global" ? [] : prev,
+      creationContext.type === "global"
+        ? prev.filter((template) => template.templateId === "guia")
+        : prev,
     // Sin borrar/duplicar secciones.
     actions: (prev, { schemaType }) =>
       SINGLETON_TYPES.has(schemaType)

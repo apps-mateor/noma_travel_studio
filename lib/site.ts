@@ -15,6 +15,9 @@ export const CONTACT = {
   // Mensaje que aparece pre-cargado al abrir el chat (opcional).
   whatsappMessage: "Hola noma, quiero empezar a planear un viaje.",
 
+  // Quién firma como contacto en las guías de viaje.
+  agente: "Nicole Quinteros",
+
   email: "contacto@nomatravelstudio.com",
   instagram: "https://www.instagram.com/noma__travelstudio/",
   instagramHandle: "@noma__travelstudio",
