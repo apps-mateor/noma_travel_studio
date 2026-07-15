@@ -1,4 +1,5 @@
 import { CONTACT, whatsappHref, whatsappLinkFromNumber } from "@/lib/site";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 // ──────────────────────────────────────────────────────────────────
 //  Columna lateral de la guía (como el índice de Mogu):
@@ -13,13 +14,15 @@ interface GuiaIndiceProps {
   indice: { id: string; titulo: string }[];
   /** Email de contacto (el del admin, con fallback al de código). */
   email: string;
-  /** WhatsApp cargado en el admin (opcional). */
+  /** WhatsApp: el de la guía si tiene, si no el de la sección Contacto. */
   whatsapp?: string;
+  /** Quién firma la guía (campo "Tu contacto" del admin). */
+  agente?: string;
   /** Nombre de la guía, para el mensaje pre-cargado de WhatsApp. */
   nombreGuia?: string;
 }
 
-export function GuiaIndice({ indice, email, whatsapp, nombreGuia }: GuiaIndiceProps) {
+export function GuiaIndice({ indice, email, whatsapp, agente, nombreGuia }: GuiaIndiceProps) {
   const telefono = whatsappHref(
     nombreGuia ? `Hola noma, quiero más info sobre ${nombreGuia}.` : undefined,
     whatsappLinkFromNumber(whatsapp),
@@ -62,10 +65,10 @@ export function GuiaIndice({ indice, email, whatsapp, nombreGuia }: GuiaIndicePr
       <div className="rounded-2xl border border-brown/15 bg-paper px-6 py-5">
         <span className="eyebrow text-brown/50">Tu contacto</span>
         <p className="mt-4 font-display text-sm uppercase tracking-[0.14em] text-brown">
-          {CONTACT.agente}
+          {agente || CONTACT.agente}
         </p>
         <p className="mt-1 font-serif italic text-brown/70">noma travel studio</p>
-        <div className="mt-4 flex flex-col gap-2">
+        <div className="mt-4 flex flex-col gap-2.5">
           <a
             href={`mailto:${email}`}
             className="break-all font-serif text-sm text-brown/80 transition-colors hover:text-naranja"
@@ -76,9 +79,12 @@ export function GuiaIndice({ indice, email, whatsapp, nombreGuia }: GuiaIndicePr
             href={telefono}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-serif text-sm text-brown/80 transition-colors hover:text-naranja"
+            className="group inline-flex items-center gap-2 font-serif text-sm text-brown/80 transition-colors hover:text-naranja"
           >
-            WhatsApp →
+            <span className="grid h-7 w-7 place-items-center rounded-full bg-verde text-cream transition-transform duration-300 group-hover:scale-105">
+              <WhatsAppIcon className="h-4 w-4" />
+            </span>
+            WhatsApp
           </a>
         </div>
       </div>

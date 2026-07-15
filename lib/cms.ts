@@ -105,10 +105,13 @@ export type CmsGuia = {
   titulo?: string;
   slug?: string;
   etiqueta?: string;
+  tipografia?: CmsEstilo["tipografia"];
   intro?: string;
   portada?: CmsImagen;
   fotos?: CmsImagen[];
   bloques?: unknown[];
+  agente?: string;
+  whatsapp?: string;
 };
 
 /** Datos mínimos de una guía para listados y generateStaticParams. */
@@ -211,10 +214,13 @@ const GUIA_FIELDS = /* groq */ `
   titulo,
   "slug": slug.current,
   etiqueta,
+  tipografia,
   intro,
   portada{asset, crop, hotspot},
   fotos[]{asset, crop, hotspot},
-  bloques
+  bloques,
+  agente,
+  whatsapp
 `;
 
 /** Una guía + los datos de contacto (para el form de leads al final). */

@@ -41,10 +41,20 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   };
 }
 
+// Tipografía del título (selector del admin) → clase de marca.
+const TIPOGRAFIA_TITULO = {
+  display: "display text-[clamp(1.9rem,5.5vw,4.2rem)]",
+  serif: "font-serif font-medium leading-[1.1] text-[clamp(2.2rem,6vw,4.8rem)]",
+  hand: "hand leading-[1.05] text-[clamp(2.6rem,7vw,5.6rem)]",
+} as const;
+
 export default async function GuiaPage({ params }: { params: Params }) {
   const { slug } = await params;
   const { guia, contacto } = await getGuia(slug);
   if (!guia) notFound();
+
+  const tipografia =
+    TIPOGRAFIA_TITULO[stegaClean(guia.tipografia) ?? "display"] ?? TIPOGRAFIA_TITULO.display;
 
   // stegaClean: estos valores viajan a FormSubmit / metadatos; las marcas
   // invisibles del modo borrador los romperían.
@@ -85,9 +95,7 @@ export default async function GuiaPage({ params }: { params: Params }) {
         />
         <div className="relative z-10 mx-auto max-w-[1180px] px-5 pb-20 pt-40 sm:px-8 sm:pb-24 sm:pt-48">
           <Eyebrow className="text-cream/60">{guia.etiqueta ?? "Guía de viaje"}</Eyebrow>
-          <h1 className="display mt-5 max-w-4xl text-[clamp(1.9rem,5.5vw,4.2rem)]">
-            {guia.titulo}
-          </h1>
+          <h1 className={`mt-5 max-w-4xl ${tipografia}`}>{guia.titulo}</h1>
           {guia.intro && (
             <p className="mt-6 max-w-2xl font-serif text-lg leading-relaxed text-cream/85">
               {guia.intro}
@@ -116,7 +124,8 @@ export default async function GuiaPage({ params }: { params: Params }) {
               <GuiaIndice
                 indice={indice}
                 email={email}
-                whatsapp={stegaClean(contacto?.whatsapp)}
+                whatsapp={stegaClean(guia.whatsapp) || stegaClean(contacto?.whatsapp)}
+                agente={guia.agente}
                 nombreGuia={nombreGuia}
               />
             </div>

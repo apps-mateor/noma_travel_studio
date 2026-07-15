@@ -39,6 +39,20 @@ export const guia = defineType({
       type: "string",
     }),
     defineField({
+      name: "tipografia",
+      title: "Tipografía del título",
+      type: "string",
+      options: {
+        layout: "radio",
+        list: [
+          { title: "Presicav (títulos de marca)", value: "display" },
+          { title: "New Spirit (serif editorial)", value: "serif" },
+          { title: "Railway Gank (manuscrita)", value: "hand" },
+        ],
+      },
+      initialValue: "display",
+    }),
+    defineField({
       name: "intro",
       title: "Introducción",
       description: "El párrafo de apertura, debajo del título en la portada.",
@@ -214,6 +228,20 @@ export const guia = defineType({
           },
         }),
       ],
+    }),
+    defineField({
+      name: "agente",
+      title: "Tu contacto — nombre",
+      description: "Quién firma esta guía en la tarjeta de contacto.",
+      type: "string",
+      initialValue: "Nicole Quinteros",
+    }),
+    defineField({
+      name: "whatsapp",
+      title: "Tu contacto — WhatsApp",
+      description:
+        "Número en formato internacional (ej: +54 9 11 5949 5632). Si queda vacío se usa el de la sección Contacto.",
+      type: "string",
     }),
   ],
   preview: {
