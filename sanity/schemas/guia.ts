@@ -1,5 +1,6 @@
 import { createElement } from "react";
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { ImportarMoguInput } from "../components/ImportarMoguInput";
 
 // Decoradores de tipografía para el editor: seleccionás texto y le
 // aplicás una fuente de marca, igual que negrita/cursiva.
@@ -42,6 +43,14 @@ export const guia = defineType({
   title: "Guía de viaje",
   type: "document",
   fields: [
+    defineField({
+      name: "importar",
+      title: "Importar desde Mogu",
+      description:
+        "Pegá el link público de la guía en Mogu y tocá Importar: se llenan todos los campos (después revisás y publicás).",
+      type: "string",
+      components: { input: ImportarMoguInput },
+    }),
     defineField({
       name: "titulo",
       title: "Título",
