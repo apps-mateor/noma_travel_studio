@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FilmImage } from "@/components/ui/FilmImage";
+import { VisorGaleria } from "./VisorGaleria";
 
 // ──────────────────────────────────────────────────────────────────
 //  Galería de cabecera de una guía (como en Mogu): la primera foto
@@ -20,18 +21,6 @@ interface GuiaGaleriaProps {
 
 export function GuiaGaleria({ fotos, nombre }: GuiaGaleriaProps) {
   const [abierta, setAbierta] = useState(false);
-
-  // Visor abierto: se cierra con Esc y bloquea el scroll del fondo.
-  useEffect(() => {
-    if (!abierta) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setAbierta(false);
-    document.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-    };
-  }, [abierta]);
 
   if (fotos.length === 0) return null;
 
@@ -79,37 +68,7 @@ export function GuiaGaleria({ fotos, nombre }: GuiaGaleriaProps) {
 
       {/* Visor a pantalla completa con todas las fotos */}
       {abierta && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={`Galería de ${nombre}`}
-          className="fixed inset-0 z-[120] overflow-y-auto bg-verde/95 backdrop-blur-sm"
-          onClick={() => setAbierta(false)}
-        >
-          <button
-            type="button"
-            onClick={() => setAbierta(false)}
-            aria-label="Cerrar galería"
-            className="fixed right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-cream font-display text-brown shadow-lg transition-transform duration-300 hover:scale-105"
-          >
-            ✕
-          </button>
-          <div
-            className="mx-auto flex max-w-4xl flex-col gap-5 px-5 py-16 sm:py-20"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {fotos.map((src, i) => (
-              <FilmImage
-                key={src}
-                seed={`noma-guia-visor-${i}`}
-                src={src}
-                alt={`Foto ${i + 1} de ${fotos.length}`}
-                sizes="(max-width: 896px) 100vw, 896px"
-                className="aspect-[3/2] w-full overflow-hidden rounded-2xl"
-              />
-            ))}
-          </div>
-        </div>
+        <VisorGaleria fotos={fotos} nombre={nombre} onCerrar={() => setAbierta(false)} />
       )}
     </>
   );

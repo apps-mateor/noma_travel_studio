@@ -1,6 +1,7 @@
 import { PortableText, stegaClean, type PortableTextComponents } from "next-sanity";
 import type { PortableTextBlock } from "next-sanity";
 import { FilmImage } from "@/components/ui/FilmImage";
+import { GaleriaContenido } from "@/components/guia/GaleriaContenido";
 import { imgUrl, type CmsImagen } from "@/lib/cms";
 
 /** Ancla (#...) de un título de sección: "Cómo llegar" → "como-llegar". */
@@ -110,46 +111,15 @@ const componentes: PortableTextComponents = {
       </aside>
     ),
 
-    // Galería dentro del texto: mosaico editorial justificado al ancho
-    // de la columna. De a tríos: dos columnas desfasadas + una ancha.
+    // Galería dentro del texto: grilla alineada; cada foto se expande
+    // al visor de pantalla completa al tocarla.
     galeria: ({ value }: { value: GaleriaValue }) => {
-      const fotos = (value.fotos ?? []).filter((f) => f?.asset?._ref);
+      const fotos = (value.fotos ?? [])
+        .filter((f) => f?.asset?._ref)
+        .map((f) => imgUrl(f, 1200))
+        .filter((src): src is string => Boolean(src));
       if (fotos.length === 0) return null;
-
-      const grupos: CmsImagen[][] = [];
-      for (let i = 0; i < fotos.length; i += 3) grupos.push(fotos.slice(i, i + 3));
-
-      return (
-        <div className="mt-8 flex flex-col gap-4 sm:gap-5">
-          {grupos.map((grupo, g) => {
-            const [a, b, c] = grupo;
-            const foto = (img: CmsImagen, clase: string, i: number) => (
-              <FilmImage
-                key={img.asset?._ref ?? `${g}-${i}`}
-                seed={`noma-guia-galeria-${g}-${i}`}
-                src={imgUrl(img, 1200)}
-                alt=""
-                sizes="(max-width: 768px) 100vw, 720px"
-                className={`w-full overflow-hidden rounded-2xl ${clase}`}
-              />
-            );
-
-            // Foto suelta → ancha, al ancho del texto.
-            if (!b) return foto(a, "aspect-[16/9]", 0);
-
-            return (
-              <div key={grupo[0]?.asset?._ref ?? g} className="flex flex-col gap-4 sm:gap-5">
-                {/* Dos columnas jugadas: arriba desfasadas, abajo alineadas */}
-                <div className="grid grid-cols-2 items-end gap-4 sm:gap-5">
-                  {foto(a, "aspect-[4/5]", 0)}
-                  {foto(b, "aspect-square", 1)}
-                </div>
-                {c && foto(c, "aspect-[16/9]", 2)}
-              </div>
-            );
-          })}
-        </div>
-      );
+      return <GaleriaContenido fotos={fotos} />;
     },
 
     // Itinerario día a día con numeración de marca.
