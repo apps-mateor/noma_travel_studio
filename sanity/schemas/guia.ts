@@ -46,9 +46,17 @@ export const guia = defineType({
       rows: 3,
     }),
     defineField({
+      name: "portada",
+      title: "Foto de cabecera",
+      description: "El fondo de la portada, detrás del título.",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
       name: "fotos",
-      title: "Fotos de cabecera",
-      description: "La primera es la portada; el resto arma la tira de fotos debajo.",
+      title: "Galería de cabecera",
+      description:
+        "Debajo de la portada: la primera foto grande a la izquierda y hasta dos apiladas a la derecha. Si hay más, se ven con el botón \"Ver galería\".",
       type: "array",
       of: [{ type: "image", options: { hotspot: true } }],
     }),
@@ -93,12 +101,19 @@ export const guia = defineType({
           },
         }),
 
-        // 💡 Tip de Nick — el consejo destacado.
+        // 💡 Tip — el consejo destacado, con título editable.
         defineArrayMember({
           type: "object",
           name: "tip",
-          title: "Tip de Nick 💡",
+          title: "Tip 💡",
           fields: [
+            defineField({
+              name: "titulo",
+              title: "Título del tip",
+              description: "Ej: Tip de Nick, Ojo con esto…",
+              type: "string",
+              initialValue: "Tip de Nick",
+            }),
             defineField({
               name: "texto",
               title: "El tip",
@@ -108,8 +123,8 @@ export const guia = defineType({
             }),
           ],
           preview: {
-            select: { subtitle: "texto" },
-            prepare: ({ subtitle }) => ({ title: "💡 Tip de Nick", subtitle }),
+            select: { title: "titulo", subtitle: "texto" },
+            prepare: ({ title, subtitle }) => ({ title: `💡 ${title || "Tip"}`, subtitle }),
           },
         }),
 
@@ -202,7 +217,7 @@ export const guia = defineType({
     }),
   ],
   preview: {
-    select: { title: "titulo", subtitle: "etiqueta", media: "fotos.0" },
+    select: { title: "titulo", subtitle: "etiqueta", media: "portada" },
     prepare: ({ title, subtitle, media }) => ({
       title: title || "Guía sin título",
       subtitle,

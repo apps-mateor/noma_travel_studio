@@ -36,7 +36,7 @@ export function indiceDeGuia(bloques?: unknown[]): { id: string; titulo: string 
 //  (tip de Nick, galería, itinerario, desplegable).
 // ──────────────────────────────────────────────────────────────────
 
-type TipValue = { texto?: string };
+type TipValue = { titulo?: string; texto?: string };
 type GaleriaValue = { fotos?: CmsImagen[] };
 type ItinerarioValue = { dias?: { _key?: string; titulo?: string; texto?: string }[] };
 type DesplegableValue = { titulo?: string; texto?: string };
@@ -80,11 +80,11 @@ const componentes: PortableTextComponents = {
     ),
   },
   types: {
-    // 💡 Tip de Nick — panel verde con acento manuscrito.
+    // 💡 Tip — panel verde con acento manuscrito; el título se edita en el admin.
     tip: ({ value }: { value: TipValue }) => (
       <aside className="mt-8 rounded-2xl bg-verde px-6 py-6 text-cream sm:px-8">
         <span className="hand block text-2xl text-naranja" aria-hidden>
-          Tip de Nick
+          {value.titulo || "Tip de Nick"}
         </span>
         <p className="mt-3 font-serif text-lg leading-relaxed text-cream/90">{value.texto}</p>
       </aside>

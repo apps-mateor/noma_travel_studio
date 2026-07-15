@@ -106,6 +106,7 @@ export type CmsGuia = {
   slug?: string;
   etiqueta?: string;
   intro?: string;
+  portada?: CmsImagen;
   fotos?: CmsImagen[];
   bloques?: unknown[];
 };
@@ -211,6 +212,7 @@ const GUIA_FIELDS = /* groq */ `
   "slug": slug.current,
   etiqueta,
   intro,
+  portada{asset, crop, hotspot},
   fotos[]{asset, crop, hotspot},
   bloques
 `;

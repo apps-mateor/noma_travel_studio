@@ -6,6 +6,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { FilmImage } from "@/components/ui/FilmImage";
 import { ContactForm } from "@/components/sections/ContactForm";
 import { GuiaBloques, indiceDeGuia } from "@/components/guia/GuiaBloques";
+import { GuiaGaleria } from "@/components/guia/GuiaGaleria";
 import { GuiaIndice } from "@/components/guia/GuiaIndice";
 import { getGuia, getGuias, imgUrl } from "@/lib/cms";
 import { CONTACT } from "@/lib/site";
@@ -53,8 +54,13 @@ export default async function GuiaPage({ params }: { params: Params }) {
   const indice = indiceDeGuia(guia.bloques);
 
   const fotos = (guia.fotos ?? []).filter((f) => f?.asset?._ref);
-  const portada = imgUrl(fotos[0], 1800);
-  const tira = fotos.slice(1, 4);
+  // Con "Foto de cabecera" cargada, toda la galería va abajo; si no
+  // (guías viejas), la primera foto de la galería hace de portada.
+  const hayPortada = Boolean(guia.portada?.asset?._ref);
+  const portada = imgUrl(hayPortada ? guia.portada : fotos[0], 1800);
+  const galeria = (hayPortada ? fotos : fotos.slice(1))
+    .map((f) => imgUrl(f, 1600))
+    .filter((src): src is string => Boolean(src));
 
   return (
     <>
@@ -90,23 +96,11 @@ export default async function GuiaPage({ params }: { params: Params }) {
         </div>
       </section>
 
-      {/* Tira de fotos de cabecera (las que siguen a la portada) */}
-      {tira.length > 0 && (
+      {/* Galería de cabecera: 1 grande + 2 apiladas y "Ver galería" */}
+      {galeria.length > 0 && (
         <div className="bg-cream">
-          <div className="mx-auto grid max-w-[1400px] gap-4 px-5 pt-10 sm:grid-cols-2 sm:px-8 lg:grid-cols-3">
-            {tira.map((foto, i) => (
-              <Reveal key={foto.asset?._ref ?? i} delay={i * 80} className={
-                tira.length === 2 && i === 0 ? "sm:col-span-1" : ""
-              }>
-                <FilmImage
-                  seed={`noma-guia-${slug}-tira-${i}`}
-                  src={imgUrl(foto, 1000)}
-                  alt=""
-                  sizes="(max-width: 640px) 100vw, 33vw"
-                  className="aspect-[4/3] w-full overflow-hidden rounded-2xl"
-                />
-              </Reveal>
-            ))}
+          <div className="mx-auto max-w-[1180px] px-5 pt-10 sm:px-8">
+            <GuiaGaleria fotos={galeria} nombre={nombreGuia} />
           </div>
         </div>
       )}
