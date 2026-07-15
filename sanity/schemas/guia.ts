@@ -1,4 +1,30 @@
+import { createElement } from "react";
 import { defineArrayMember, defineField, defineType } from "sanity";
+
+// Decoradores de tipografía para el editor: seleccionás texto y le
+// aplicás una fuente de marca, igual que negrita/cursiva.
+const TIPOGRAFIA_DECORATORS = [
+  {
+    title: "Manuscrita (Railway Gank)",
+    value: "hand",
+    icon: () =>
+      createElement("span", { style: { fontFamily: "cursive", fontWeight: 600 } }, "A"),
+    component: (props: { children?: React.ReactNode }) =>
+      createElement("span", { style: { fontFamily: "cursive" } }, props.children),
+  },
+  {
+    title: "Tipografía de marca (Presicav)",
+    value: "display",
+    icon: () =>
+      createElement("span", { style: { fontWeight: 700, letterSpacing: "0.08em" } }, "A"),
+    component: (props: { children?: React.ReactNode }) =>
+      createElement(
+        "span",
+        { style: { fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" } },
+        props.children,
+      ),
+  },
+];
 
 // ──────────────────────────────────────────────────────────────────
 //  Guía de viaje — reemplaza las guías que se armaban en Mogu.
@@ -61,16 +87,16 @@ export const guia = defineType({
     }),
     defineField({
       name: "portada",
-      title: "Foto de cabecera",
+      title: "Imagen de portada",
       description: "El fondo de la portada, detrás del título.",
       type: "image",
       options: { hotspot: true },
     }),
     defineField({
       name: "fotos",
-      title: "Galería de cabecera",
+      title: "Imágenes adicionales",
       description:
-        "Debajo de la portada: la primera foto grande a la izquierda y hasta dos apiladas a la derecha. Si hay más, se ven con el botón \"Ver galería\".",
+        "Debajo de la portada: la primera grande a la izquierda y hasta dos apiladas a la derecha. Si hay más, se ven con el botón \"Ver galería\".",
       type: "array",
       of: [{ type: "image", options: { hotspot: true } }],
     }),
@@ -95,6 +121,7 @@ export const guia = defineType({
             decorators: [
               { title: "Negrita", value: "strong" },
               { title: "Cursiva", value: "em" },
+              ...TIPOGRAFIA_DECORATORS,
             ],
             annotations: [
               {
@@ -113,6 +140,13 @@ export const guia = defineType({
               },
             ],
           },
+        }),
+
+        // Imagen suelta entre párrafos (al ancho del texto).
+        defineArrayMember({
+          type: "image",
+          title: "Imagen",
+          options: { hotspot: true },
         }),
 
         // 💡 Tip — el consejo destacado, con título editable.

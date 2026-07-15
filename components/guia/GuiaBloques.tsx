@@ -68,6 +68,11 @@ const componentes: PortableTextComponents = {
     ),
   },
   marks: {
+    // Tipografías de marca aplicadas desde la barra del editor.
+    hand: ({ children }) => <span className="hand text-[1.2em]">{children}</span>,
+    display: ({ children }) => (
+      <span className="font-display text-[0.85em] uppercase tracking-[0.12em]">{children}</span>
+    ),
     link: ({ children, value }) => (
       <a
         href={(value as { href?: string } | undefined)?.href}
@@ -80,6 +85,21 @@ const componentes: PortableTextComponents = {
     ),
   },
   types: {
+    // Imagen suelta entre párrafos — justificada al ancho del texto.
+    image: ({ value }: { value: CmsImagen }) => {
+      const src = imgUrl(value, 1400);
+      if (!src) return null;
+      return (
+        <FilmImage
+          seed="noma-guia-imagen"
+          src={src}
+          alt=""
+          sizes="(max-width: 768px) 100vw, 720px"
+          className="mt-8 aspect-[3/2] w-full overflow-hidden rounded-2xl"
+        />
+      );
+    },
+
     // 💡 Tip — panel verde con acento manuscrito; el título se edita en el admin.
     tip: ({ value }: { value: TipValue }) => (
       <aside className="mt-8 rounded-2xl bg-verde px-6 py-6 text-cream sm:px-8">
@@ -90,28 +110,44 @@ const componentes: PortableTextComponents = {
       </aside>
     ),
 
-    // Galería de fotos con el tratamiento FilmImage del sitio.
+    // Galería dentro del texto: mosaico editorial justificado al ancho
+    // de la columna. De a tríos: dos columnas desfasadas + una ancha.
     galeria: ({ value }: { value: GaleriaValue }) => {
       const fotos = (value.fotos ?? []).filter((f) => f?.asset?._ref);
       if (fotos.length === 0) return null;
+
+      const grupos: CmsImagen[][] = [];
+      for (let i = 0; i < fotos.length; i += 3) grupos.push(fotos.slice(i, i + 3));
+
       return (
-        <div
-          className={`mt-8 grid gap-4 ${fotos.length === 1 ? "" : "sm:grid-cols-2"} ${
-            fotos.length > 2 ? "lg:grid-cols-3" : ""
-          }`}
-        >
-          {fotos.map((foto, i) => (
-            <FilmImage
-              key={foto.asset?._ref ?? i}
-              seed={`noma-guia-galeria-${i}`}
-              src={imgUrl(foto, 1200)}
-              alt=""
-              sizes="(max-width: 640px) 100vw, 50vw"
-              className={`w-full overflow-hidden rounded-2xl ${
-                fotos.length === 1 ? "aspect-[16/9]" : "aspect-[4/3]"
-              }`}
-            />
-          ))}
+        <div className="mt-8 flex flex-col gap-4 sm:gap-5">
+          {grupos.map((grupo, g) => {
+            const [a, b, c] = grupo;
+            const foto = (img: CmsImagen, clase: string, i: number) => (
+              <FilmImage
+                key={img.asset?._ref ?? `${g}-${i}`}
+                seed={`noma-guia-galeria-${g}-${i}`}
+                src={imgUrl(img, 1200)}
+                alt=""
+                sizes="(max-width: 768px) 100vw, 720px"
+                className={`w-full overflow-hidden rounded-2xl ${clase}`}
+              />
+            );
+
+            // Foto suelta → ancha, al ancho del texto.
+            if (!b) return foto(a, "aspect-[16/9]", 0);
+
+            return (
+              <div key={grupo[0]?.asset?._ref ?? g} className="flex flex-col gap-4 sm:gap-5">
+                {/* Dos columnas jugadas: alturas distintas y una baja un poco */}
+                <div className="grid grid-cols-2 items-start gap-4 sm:gap-5">
+                  {foto(a, "aspect-[4/5]", 0)}
+                  {foto(b, "aspect-[3/4] sm:mt-10", 1)}
+                </div>
+                {c && foto(c, "aspect-[16/9]", 2)}
+              </div>
+            );
+          })}
         </div>
       );
     },
