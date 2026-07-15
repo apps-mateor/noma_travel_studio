@@ -113,7 +113,7 @@ export const guia = defineType({
       name: "bloques",
       title: "Contenido de la guía",
       description:
-        "Escribí el texto y usá el botón + para insertar bloques: título de sección, tip de Nick, galería, itinerario o desplegable.",
+        "Escribí el texto y usá el botón + para insertar bloques: título de sección, tip, galería, itinerario o desplegable.",
       type: "array",
       of: [
         defineArrayMember({
@@ -167,21 +167,46 @@ export const guia = defineType({
             defineField({
               name: "titulo",
               title: "Título del tip",
-              description: "Ej: Tip de Nick, Ojo con esto…",
+              description: "Ej: Tip, Ojo con esto…",
               type: "string",
-              initialValue: "Tip de Nick",
+              initialValue: "Tip",
             }),
             defineField({
               name: "texto",
               title: "El tip",
-              type: "text",
-              rows: 3,
+              description: "Podés usar viñetas con el botón de lista.",
+              type: "array",
+              of: [
+                defineArrayMember({
+                  type: "block",
+                  styles: [{ title: "Texto", value: "normal" }],
+                  lists: [
+                    { title: "Viñetas", value: "bullet" },
+                    { title: "Numerada", value: "number" },
+                  ],
+                  marks: {
+                    decorators: [
+                      { title: "Negrita", value: "strong" },
+                      { title: "Cursiva", value: "em" },
+                    ],
+                  },
+                }),
+              ],
               validation: (rule) => rule.required(),
             }),
           ],
           preview: {
-            select: { title: "titulo", subtitle: "texto" },
-            prepare: ({ title, subtitle }) => ({ title: `💡 ${title || "Tip"}`, subtitle }),
+            select: { title: "titulo", texto: "texto" },
+            prepare: ({ title, texto }) => ({
+              title: `💡 ${title || "Tip"}`,
+              subtitle: Array.isArray(texto)
+                ? texto
+                    .map((b: { children?: { text?: string }[] }) =>
+                      (b.children ?? []).map((c) => c.text ?? "").join(""),
+                    )
+                    .join(" · ")
+                : texto,
+            }),
           },
         }),
 

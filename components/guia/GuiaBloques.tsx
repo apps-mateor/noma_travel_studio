@@ -37,10 +37,33 @@ export function indiceDeGuia(bloques?: unknown[]): { id: string; titulo: string 
 //  (tip de Nick, galería, itinerario, desplegable).
 // ──────────────────────────────────────────────────────────────────
 
-type TipValue = { titulo?: string; texto?: string };
+// El texto del tip pasó de string a texto enriquecido; se aceptan ambos
+// para que los tips guardados antes del cambio sigan renderizando.
+type TipValue = { titulo?: string; texto?: string | PortableTextBlock[] };
 type GaleriaValue = { fotos?: CmsImagen[] };
 type ItinerarioValue = { dias?: { _key?: string; titulo?: string; texto?: string }[] };
 type DesplegableValue = { titulo?: string; texto?: string };
+
+// Texto enriquecido dentro del panel del tip (fondo verde, texto crema).
+const componentesTip: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => (
+      <p className="mt-3 font-serif text-lg leading-relaxed text-cream/90">{children}</p>
+    ),
+  },
+  list: {
+    bullet: ({ children }) => (
+      <ul className="mt-3 list-disc space-y-1.5 pl-5 font-serif text-lg leading-relaxed text-cream/90 marker:text-naranja">
+        {children}
+      </ul>
+    ),
+    number: ({ children }) => (
+      <ol className="mt-3 list-decimal space-y-1.5 pl-5 font-serif text-lg leading-relaxed text-cream/90 marker:text-naranja">
+        {children}
+      </ol>
+    ),
+  },
+};
 
 const componentes: PortableTextComponents = {
   block: {
@@ -102,14 +125,21 @@ const componentes: PortableTextComponents = {
     },
 
     // 💡 Tip — panel verde con acento manuscrito; el título se edita en el admin.
-    tip: ({ value }: { value: TipValue }) => (
-      <aside className="mt-8 rounded-2xl bg-verde px-6 py-6 text-cream sm:px-8">
-        <span className="hand block text-2xl text-naranja" aria-hidden>
-          {value.titulo || "Tip de Nick"}
-        </span>
-        <p className="mt-3 font-serif text-lg leading-relaxed text-cream/90">{value.texto}</p>
-      </aside>
-    ),
+    tip: ({ value }: { value: TipValue }) => {
+      const texto = value.texto;
+      return (
+        <aside className="mt-8 rounded-2xl bg-verde px-6 py-6 text-cream sm:px-8">
+          <span className="hand block text-2xl text-naranja" aria-hidden>
+            {value.titulo || "Tip"}
+          </span>
+          {Array.isArray(texto) ? (
+            <PortableText value={texto} components={componentesTip} />
+          ) : (
+            <p className="mt-3 font-serif text-lg leading-relaxed text-cream/90">{texto}</p>
+          )}
+        </aside>
+      );
+    },
 
     // Galería dentro del texto: grilla alineada; cada foto se expande
     // al visor de pantalla completa al tocarla.

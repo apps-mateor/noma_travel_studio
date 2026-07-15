@@ -141,7 +141,8 @@ function comoTip(html: string) {
   const m = plano.match(/^💡?\s*(nicki\s?tips?|nick\s?tips?|tip de nick|tips?)\s*:?\s*/iu);
   if (!/^💡/u.test(plano) && !m?.[1]) return null;
   const texto = plano.replace(/^💡\s*/u, "").replace(/^(nicki\s?tips?|nick\s?tips?|tip de nick|tips?)\s*:?\s*/iu, "");
-  return { _type: "tip", _key: key(), titulo: "Tip de Nick", texto };
+  // El campo texto es texto enriquecido (array de bloques) en el admin.
+  return { _type: "tip", _key: key(), titulo: "Tip", texto: [bloqueTexto(texto)] };
 }
 
 /** HTML de un bloque "text" de Mogu → lista de bloques del admin. */
