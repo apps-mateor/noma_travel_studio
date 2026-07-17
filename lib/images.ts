@@ -17,7 +17,7 @@
 
 /** Reemplazos reales seed -> ruta/URL. Editá SÓLO este objeto. */
 export const IMAGE_OVERRIDES: Record<string, string> = {
-  // "noma-hero": "/images/hero.jpg",
+  "noma-hero": "/images/hero.jpg",
   // "noma-japon": "/images/japon.jpg",
 };
 

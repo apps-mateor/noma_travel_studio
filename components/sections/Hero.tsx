@@ -3,6 +3,7 @@ import { stegaClean } from "next-sanity";
 import { Arrow } from "@/components/brand/Arrow";
 import { Button } from "@/components/ui/Button";
 import { FitLines } from "@/components/ui/FitLines";
+import { HeroVideo } from "@/components/sections/HeroVideo";
 import { imageSrc } from "@/lib/images";
 import { cdnImage, type CmsHero, type CmsEstilo, type CmsBlock } from "@/lib/cms";
 
@@ -105,16 +106,7 @@ export function Hero({ data }: HeroProps) {
   return (
     <section className="relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden bg-verde text-cream">
       {/* Fondo: video (subido o /public/videos/hero.mp4) con imagen de respaldo */}
-      <video
-        className="absolute inset-0 h-full w-full object-cover"
-        src={videoSrc}
-        poster={poster}
-        autoPlay
-        muted
-        loop
-        playsInline
-        aria-hidden
-      />
+      <HeroVideo src={videoSrc} poster={poster} />
       {/* Oscurecido para legibilidad del texto sobre el video */}
       <div
         className="pointer-events-none absolute inset-0"
