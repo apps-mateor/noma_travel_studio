@@ -9,6 +9,7 @@ import { STUDIO, POSICIONAMIENTO } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Studio",
   description: "Detrás de noma: curaduría, mirada, criterio y experiencia real.",
+  alternates: { canonical: "/studio" },
 };
 
 export default function StudioPage() {

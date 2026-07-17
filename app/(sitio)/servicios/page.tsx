@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Servicios",
   description:
     "Diseño de viaje a medida, lunas de miel, roadtrips y gestión end-to-end con la app de noma.",
+  alternates: { canonical: "/servicios" },
 };
 
 export default function ServiciosPage() {

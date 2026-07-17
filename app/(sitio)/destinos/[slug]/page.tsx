@@ -32,12 +32,21 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!guia) return { title: "Guía no encontrada" };
 
   const portada = imgUrl(guia.fotos?.[0], 1200);
+  const titulo = stegaClean(guia.titulo);
+  const descripcion =
+    stegaClean(guia.intro) ??
+    "Una guía de viaje curada por noma travel studio, con mirada propia.";
   return {
-    title: stegaClean(guia.titulo),
-    description:
-      stegaClean(guia.intro) ??
-      "Una guía de viaje curada por noma travel studio, con mirada propia.",
-    openGraph: portada ? { images: [{ url: portada, width: 1200 }] } : undefined,
+    title: titulo,
+    description: descripcion,
+    alternates: { canonical: `/destinos/${slug}` },
+    // openGraph no hereda campos del layout raíz: se repiten acá.
+    openGraph: {
+      title: titulo,
+      description: descripcion,
+      type: "article",
+      ...(portada ? { images: [{ url: portada, width: 1200 }] } : {}),
+    },
   };
 }
 

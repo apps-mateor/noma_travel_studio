@@ -29,6 +29,8 @@ export type CmsGuiaCard = {
   slug?: string;
   etiqueta?: string;
   foto?: CmsImagen;
+  /** Fecha de última edición en Sanity (para el sitemap). */
+  actualizado?: string;
 };
 
 const GUIA_FIELDS = /* groq */ `
@@ -72,7 +74,8 @@ export async function getGuias(): Promise<CmsGuiaCard[]> {
   try {
     const { data } = await sanityFetch({
       query: /* groq */ `*[_type == "guia" && defined(slug.current)] | order(titulo asc) {
-        titulo, "slug": slug.current, etiqueta, "foto": fotos[0]{asset, crop, hotspot}
+        titulo, "slug": slug.current, etiqueta, "foto": fotos[0]{asset, crop, hotspot},
+        "actualizado": _updatedAt
       }`,
       tags: [CMS_CACHE_TAG],
     });

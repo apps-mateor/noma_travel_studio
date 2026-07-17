@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "Destinos",
   description:
     "Destinos curados con mirada propia: Japón, Toscana, Marruecos, Patagonia y más.",
+  alternates: { canonical: "/destinos" },
 };
 
 export default function DestinosPage() {

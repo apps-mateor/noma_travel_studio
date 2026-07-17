@@ -7,8 +7,8 @@ export const metadata: Metadata = {
   // www es el dominio principal en Vercel; el apex redirige acá.
   metadataBase: new URL("https://www.nomatravelstudio.com"),
   title: {
-    default: "NOMA - Travel Studio",
-    template: "%s · NOMA - Travel Studio",
+    default: "NOMA Travel Studio",
+    template: "%s · NOMA Travel Studio",
   },
   description:
     "Viajes curados para exploradores modernos. Diseñamos viajes a medida desde la escucha y el criterio, no desde el catálogo. Lunas de miel, roadtrips y experiencias.",
@@ -20,12 +20,17 @@ export const metadata: Metadata = {
     "viajes curados",
     "noma",
   ],
+  // Cada página pisa el canonical con su propia ruta.
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "NOMA - Travel Studio",
+    title: "NOMA Travel Studio",
     description: SITE.claimEs,
     type: "website",
     locale: "es_AR",
+    url: "/",
+    siteName: "NOMA Travel Studio",
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({
