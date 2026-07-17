@@ -12,6 +12,12 @@ import { cdnImage, type CmsHero, type CmsEstilo, type CmsBlock } from "@/lib/cms
 //    el admin en "Fondo". Mientras no exista, se muestra la imagen.
 const HERO_VIDEO = "/videos/hero.mp4";
 
+// Primer frame del video del hero, exportado a mano: mientras el video
+// descarga se ve este cuadro quieto y el arranque es invisible (la imagen
+// "empieza a moverse"). Si cambiás el video en el admin, regeneralo:
+//   ffmpeg -i video.mp4 -frames:v 1 -q:v 3 public/images/hero-poster.jpg
+const HERO_VIDEO_POSTER = "/images/hero-poster.jpg";
+
 // Colores de marca disponibles como marks en el título enriquecido.
 const COLOR_MARK: Record<string, string> = {
   naranja: "text-naranja",
@@ -91,9 +97,12 @@ export function Hero({ data }: HeroProps) {
   // (comparar, indexar objetos), si no el render del server explota.
   const fondoEsVideo = Boolean(stegaClean(data?.fondo?.mimeType)?.startsWith("video/"));
 
-  const poster =
-    fondoUrl && !fondoEsVideo
-      ? cdnImage(fondoUrl, 1920)
+  // Prioridad del piso visual: imagen del admin > primer frame del video
+  // > foto local del seed noma-hero (caso sin fondo configurado).
+  const poster = fondoUrl && !fondoEsVideo
+    ? cdnImage(fondoUrl, 1920)
+    : fondoEsVideo
+      ? HERO_VIDEO_POSTER
       : imageSrc("noma-hero", { w: 1920, h: 1080 });
   const videoSrc = fondoEsVideo && fondoUrl ? fondoUrl : HERO_VIDEO;
 
