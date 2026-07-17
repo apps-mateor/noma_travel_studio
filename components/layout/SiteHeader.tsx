@@ -25,9 +25,11 @@ export function SiteHeader({ whatsappLink = CONTACT.whatsappLink }: SiteHeaderPr
           : "bg-transparent py-5"
       }`}
     >
-      <div className="mx-auto flex max-w-[1400px] items-center justify-between px-5 sm:px-8">
+      {/* relative z-50: por encima del overlay móvil (z-40), si no la X
+          de cerrar queda tapada y el menú no se puede cerrar. */}
+      <div className="relative z-50 mx-auto flex max-w-[1400px] items-center justify-between px-5 sm:px-8">
         <Wordmark
-          className={`transition-colors duration-500 ${scrolled ? "text-naranja" : "text-cream"}`}
+          className={`transition-colors duration-500 ${scrolled && !open ? "text-naranja" : "text-cream"}`}
         />
 
         {/* Nav desktop — color adaptable según scroll */}
@@ -51,7 +53,7 @@ export function SiteHeader({ whatsappLink = CONTACT.whatsappLink }: SiteHeaderPr
 
         <div
           className={`flex items-center gap-3 transition-colors duration-500 ${
-            scrolled ? "text-brown" : "text-cream"
+            scrolled && !open ? "text-brown" : "text-cream"
           }`}
         >
           {/* CTA naranja de marca (brandbook) */}
