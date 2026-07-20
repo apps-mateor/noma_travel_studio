@@ -3,7 +3,7 @@
 import { useState, type FormEvent } from "react";
 
 const FIELD =
-  "w-full rounded-xl border border-brown/20 bg-cream px-4 py-3 font-serif text-brown placeholder:text-brown/40 transition-colors focus:border-naranja focus:outline-none";
+  "w-full rounded-xl border border-brown/20 bg-celeste px-4 py-3 font-serif text-brown placeholder:text-brown/40 transition-colors focus:border-naranja focus:outline-none";
 
 type Estado = "idle" | "enviando" | "ok" | "error";
 
