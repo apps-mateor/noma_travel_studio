@@ -77,7 +77,7 @@ export function ContactForm({ email, placeholders, asunto }: ContactFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="relative rounded-3xl bg-cream p-6 shadow-[0_30px_60px_-30px_rgba(89,57,43,0.4)] sm:p-9"
+      className="relative rounded-3xl bg-celeste-oscuro p-6 text-brown shadow-[0_30px_60px_-30px_rgba(89,57,43,0.4)] sm:p-9"
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="flex flex-col gap-2">

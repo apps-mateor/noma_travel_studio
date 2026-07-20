@@ -49,7 +49,7 @@ export function Contacto({ data }: ContactoProps) {
                 href={whatsappHref(undefined, whatsappLink)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center justify-between rounded-xl bg-verde px-5 py-4 text-cream transition-transform duration-300 hover:-translate-y-0.5"
+                className="group flex items-center justify-between rounded-xl bg-brown px-5 py-4 text-cream transition-transform duration-300 hover:-translate-y-0.5"
               >
                 <span className="font-display text-sm uppercase tracking-[0.16em]">
                   WhatsApp
