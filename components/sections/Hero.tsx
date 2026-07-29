@@ -1,5 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 import { stegaClean } from "next-sanity";
+import { AnchorLink } from "@/components/ui/AnchorLink";
 import { Arrow } from "@/components/brand/Arrow";
 import { Button } from "@/components/ui/Button";
 import { FitLines } from "@/components/ui/FitLines";
@@ -160,13 +161,13 @@ export function Hero({ data }: HeroProps) {
       </div>
 
       {/* Indicador de scroll: la flecha gestual de la marca, hacia abajo */}
-      <a
+      <AnchorLink
         href="/#concepto"
         aria-label="Bajar para explorar"
         className="absolute bottom-7 left-1/2 z-10 -translate-x-1/2 animate-bounce text-cream/80 transition-colors hover:text-naranja motion-reduce:animate-none"
       >
         <Arrow className="h-4 rotate-90" />
-      </a>
+      </AnchorLink>
     </section>
   );
 }

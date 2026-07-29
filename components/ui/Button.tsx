@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { type ReactNode } from "react";
+import { AnchorLink } from "@/components/ui/AnchorLink";
 import { Arrow } from "@/components/brand/Arrow";
 
 type Variant = "solid" | "outline" | "ghost";
@@ -24,7 +24,7 @@ const TONE: Record<Tone, { solidBg: string; solidText: string; line: string; tex
 
 /**
  * Botón/CTA pill con estados hover/focus diseñados.
- * Renderiza un <Link> (interno) o <a> (externo).
+ * Renderiza un AnchorLink (interno, resuelve anclas) o <a> (externo).
  */
 export function Button({
   children,
@@ -63,8 +63,8 @@ export function Button({
   }
 
   return (
-    <Link href={href} className={classes}>
+    <AnchorLink href={href} className={classes}>
       {inner}
-    </Link>
+    </AnchorLink>
   );
 }

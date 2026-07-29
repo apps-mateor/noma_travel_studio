@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { AnchorLink } from "@/components/ui/AnchorLink";
 import { CONTACT, FOOTER_LINKS, SITE, instagramUrl, whatsappHref } from "@/lib/site";
 import { WhatsAppFab } from "./WhatsAppFab";
 
@@ -27,13 +27,13 @@ export function SiteFooter({
           <nav aria-label="Páginas" className="flex flex-col gap-3">
             <p className="eyebrow text-brown/50">Navegá</p>
             {FOOTER_LINKS.map((link) => (
-              <Link
+              <AnchorLink
                 key={link.href}
                 href={link.href}
                 className="w-fit text-brown/90 transition-colors hover:text-naranja"
               >
                 {link.label}
-              </Link>
+              </AnchorLink>
             ))}
           </nav>
 
